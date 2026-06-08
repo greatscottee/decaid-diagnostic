@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RTR &amp; Open Banking Readiness Assessment — DecAid</title>
+<meta name="description" content="A 12-question self-assessment for Canadian credit union leaders. Identify your RTR and open banking readiness gaps before the 2026 launch window closes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:        #1C3553;
+  --navy-deep:   #122438;
+  --teal:        #0D7E8C;
+  --teal-mid:    #0a6570;
+  --teal-light:  #E0F4F7;
+  --teal-pale:   #f0fafb;
+  --amber:       #C25F2A;
+  --amber-light: #FDF0E8;
+  --green:       #1A7A5E;
+  --green-light: #E6F4F0;
+  --red-light:   #FEF2F2;
+  --red:         #B91C1C;
+  --off-white:   #F7F9FB;
+  --white:       #FFFFFF;
+  --text-dark:   #1C3553;
+  --text-mid:    #374151;
+  --text-light:  #6B7280;
+  --border:      #E5E7EB;
+  --border-mid:  #D1D5DB;
+  --serif:       'Playfair Display', Georgia, serif;
+  --sans:        'DM Sans', system-ui, sans-serif;
+  --transition:  0.2s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--off-white);
+  color: var(--text-dark);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+.page-header {
+  background: var(--navy);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 15px;
+  color: #fff;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.logo span {
+  color: var(--teal);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  font-size: 13px;
+  margin-left: 4px;
+}
+
+.header-tag {
+  font-size: 11px;
+  font-weight: 400;
+  color: #7BAFD4;
+  letter-spacing: 0.05em;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── Screens ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ── Intro ── */
+.intro-wrap {
+  padding: 4rem 0 5rem;
+}
+
+.intro-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 1rem;
+}
+
+.intro-title {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.25;
+  margin-bottom: 1.25rem;
+  max-width: 580px;
+}
+
+.intro-body {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text-mid);
+  line-height: 1.75;
+  max-width: 580px;
+  margin-bottom: 2rem;
+}
+
+.intro-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 2.5rem;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--text-mid);
+}
+
+.chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
+}
+
+.btn-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--navy);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition);
+  text-decoration: none;
+}
+
+.btn-start:hover { background: var(--teal); }
+
+.btn-start svg {
+  transition: transform var(--transition);
+}
+
+.btn-start:hover svg { transform: translateX(3px); }
+
+.intro-disclaimer {
+  margin-top: 1.25rem;
+  font-size: 13px;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+/* ── Divider ── */
+.section-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 3rem 0;
+}
+
+/* ── What it covers ── */
+.covers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 1.5rem;
+}
+
+.cover-card {
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.cover-num {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+
+.cover-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.cover-body {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.section-heading {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.section-sub {
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 300;
+}
+
+/* ── Question screen ── */
+.q-wrap {
+  padding: 2.5rem 0 4rem;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.progress-label {
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 300;
+}
+
+.progress-pct {
+  font-size: 12px;
+  color: var(--teal);
+  font-weight: 500;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--teal);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.q-section-tag {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.q-section-tag::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  background: var(--teal);
+  border-radius: 1px;
+}
+
+.q-text {
+  font-family: var(--serif);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.35;
+  margin-bottom: 2rem;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.option:hover {
+  border-color: var(--teal);
+  background: var(--teal-pale);
+}
+
+.option:active { transform: scale(0.995); }
+
+.option.selected {
+  border-color: var(--teal);
+  background: var(--teal-light);
+}
+
+.radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-mid);
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.option.selected .radio {
+  border-color: var(--teal);
+  background: var(--teal);
+}
+
+.radio-inner {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.option.selected .radio-inner { opacity: 1; }
+
+.option-content {}
+
+.option-main {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+}
+
+.option-note {
+  font-size: 13px;
+  color: var(--text-light);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.nav-info {
+  font-size: 13px;
+  color: var(--text-light);
+  font-weight: 300;
+}
+
+.nav-btns { display: flex; gap: 8px; }
+
+.btn-nav {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--text-dark);
+  transition: all var(--transition);
+}
+
+.btn-nav:hover:not(:disabled) {
+  border-color: var(--border-mid);
+  background: var(--off-white);
+}
+
+.btn-nav:disabled { opacity: 0.3; cursor: default; }
+
+.btn-nav-primary {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+.btn-nav-primary:hover:not(:disabled) {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+/* ── Results screen ── */
+.results-wrap {
+  padding: 3rem 0 5rem;
+}
+
+.results-top {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2.5rem;
+  align-items: start;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 560px) {
+  .results-top { grid-template-columns: 1fr; }
+}
+
+.score-ring-wrap { display: flex; flex-direction: column; align-items: center; }
+
+.score-ring-label {
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 300;
+  margin-top: 8px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.result-tier {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.tier-critical   { background: var(--red-light);   color: var(--red); }
+.tier-significant { background: var(--amber-light); color: var(--amber); }
+.tier-developing  { background: var(--teal-light);  color: var(--teal-mid); }
+
+.result-headline {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2.8vw, 26px);
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.result-body {
+  font-size: 15px;
+  color: var(--text-mid);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.results-section-head {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 1rem;
+}
+
+.bar-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 2.5rem;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 44px;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 500px) {
+  .bar-row { grid-template-columns: 120px 1fr 40px; }
+}
+
+.bar-name {
+  font-size: 13px;
+  color: var(--text-mid);
+  font-weight: 400;
+}
+
+.bar-track {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  width: 0;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bar-pct {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dark);
+  text-align: right;
+}
+
+.gap-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2.5rem; }
+
+.gap-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 18px 20px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.gap-icon-wrap {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.gap-icon-critical { background: var(--red-light); color: var(--red); }
+.gap-icon-warning  { background: var(--amber-light); color: var(--amber); }
+
+.gap-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.gap-label-critical { color: var(--red); }
+.gap-label-warning  { color: var(--amber); }
+
+.gap-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.gap-desc {
+  font-size: 14px;
+  color: var(--text-mid);
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+/* ── CTA Block ── */
+.cta-block {
+  background: var(--navy);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.cta-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7BAFD4;
+  margin-bottom: 8px;
+}
+
+.cta-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.cta-body {
+  font-size: 15px;
+  color: #9ABDD8;
+  font-weight: 300;
+  line-height: 1.7;
+  margin-bottom: 1.75rem;
+}
+
+.cta-scope {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  margin-bottom: 1.75rem;
+}
+
+.cta-scope-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #9ABDD8;
+  font-weight: 300;
+}
+
+.cta-scope-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+.cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--teal);
+  color: #fff;
+  padding: 13px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background var(--transition);
+  border: none;
+  cursor: pointer;
+  font-family: var(--sans);
+}
+
+.btn-cta-primary:hover { background: var(--teal-mid); }
+
+.btn-cta-secondary {
+  font-size: 14px;
+  color: #7BAFD4;
+  text-decoration: none;
+  font-weight: 300;
+  border-bottom: 1px solid rgba(123,175,212,0.4);
+  padding-bottom: 1px;
+  transition: color var(--transition);
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+  font-family: var(--sans);
+}
+
+.btn-cta-secondary:hover { color: #fff; border-bottom-color: rgba(255,255,255,0.4); }
+
+.restart-row {
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.btn-restart {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--text-light);
+  cursor: pointer;
+  font-family: var(--sans);
+  font-weight: 300;
+  padding: 8px;
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition);
+}
+
+.btn-restart:hover { color: var(--text-mid); border-bottom-color: var(--border); }
+
+/* ── Footer ── */
+.page-footer {
+  background: var(--navy-deep);
+  padding: 2rem;
+  margin-top: 4rem;
+}
+
+.footer-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-logo {
+  font-size: 14px;
+  font-weight: 500;
+  color: #7BAFD4;
+}
+
+.footer-text {
+  font-size: 13px;
+  color: rgba(123,175,212,0.6);
+  font-weight: 300;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-link {
+  font-size: 13px;
+  color: rgba(123,175,212,0.6);
+  text-decoration: none;
+  font-weight: 300;
+  transition: color var(--transition);
+}
+
+.footer-link:hover { color: #7BAFD4; }
+
+/* ── Fade transition ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.screen.active {
+  animation: fadeIn 0.35s ease;
+}
+
+/* ── Print ── */
+@media print {
+  .page-header, .btn-start, .btn-nav, .btn-restart, .btn-cta-primary, .btn-cta-secondary { display: none; }
+  .cta-block { background: var(--off-white) !important; }
+  .cta-title, .cta-body, .cta-eyebrow, .cta-scope-item { color: var(--text-dark) !important; }
+}
+
+@media (max-width: 600px) {
+  .bar-row { grid-template-columns: 110px 1fr 36px; }
+  .cta-block { padding: 1.5rem; }
+  .covers-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">DecAid RTR and Open Banking Readiness Self-Assessment — 12 questions across 4 domains for Canadian credit union leaders</h1>
+
+<header class="page-header">
+  <a href="#" class="logo" onclick="restart();return false;">DecAid <span>· ADVISORY</span></a>
+  <span class="header-tag">Package B Diagnostic</span>
+</header>
+
+<!-- ══ INTRO SCREEN ══════════════════════════════════════ -->
+<div id="screen-intro" class="screen active">
+  <div class="container">
+    <div class="intro-wrap">
+      <p class="intro-eyebrow">RTR &amp; Open Banking Readiness Assessment</p>
+      <h1 class="intro-title">Is your credit union ready for what's arriving in 2026?</h1>
+      <p class="intro-body">
+        Canada's payments and data landscape is being restructured simultaneously. The Real-Time Rail is targeting a Q3–late 2026 launch. Open Banking Phase 1 is live. Most credit unions have neither a defined RTR connectivity strategy nor a member data response plan. The institutions that wait are accumulating costs they may not fully see yet.
+      </p>
+      <p class="intro-body" style="margin-top:-1rem;">
+        This 12-question assessment takes under 8 minutes. It identifies your specific readiness gaps across four domains and produces a scored profile you can bring to your board or leadership team.
+      </p>
+
+      <div class="intro-chips">
+        <div class="chip"><div class="chip-dot"></div> 12 questions &nbsp;·&nbsp; 4 domains</div>
+        <div class="chip"><div class="chip-dot"></div> 5–8 minutes</div>
+        <div class="chip"><div class="chip-dot"></div> Responses not stored or shared</div>
+      </div>
+
+      <button class="btn-start" onclick="startAssessment()">
+        Begin assessment
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <p class="intro-disclaimer">Your answers are used only to generate your readiness profile. Nothing is stored.</p>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading">What this assessment covers</h2>
+      <p class="section-sub" style="margin-bottom:1.25rem;">Four domains, three questions each</p>
+
+      <div class="covers-grid">
+        <div class="cover-card">
+          <div class="cover-num">Domain 01</div>
+          <div class="cover-title">RTR connectivity &amp; access strategy</div>
+          <div class="cover-body">Connectivity plan, liquidity obligations, and the DSP vs direct Payments Canada membership decision</div>
+        </div>
+        <div class="cover-card">
+          <div class="cover-num">Domain 02</div>
+          <div class="cover-title">Open banking readiness</div>
+          <div class="cover-body">Consumer-Driven Banking strategy, screen-scraping prohibition impact, and accreditation pathway</div>
+        </div>
+        <div class="cover-card">
+          <div class="cover-num">Domain 03</div>
+          <div class="cover-title">Member data &amp; primacy</div>
+          <div class="cover-body">Member data strategy, open banking consent frameworks, and board-level strategic confidence</div>
+        </div>
+        <div class="cover-card">
+          <div class="cover-num">Domain 04</div>
+          <div class="cover-title">Infrastructure &amp; institutional readiness</div>
+          <div class="cover-body">API readiness, fintech partnership governance, and overall payments modernization posture</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ QUESTION SCREEN ════════════════════════════════════ -->
+<div id="screen-question" class="screen">
+  <div class="container">
+    <div class="q-wrap">
+      <div>
+        <div class="progress-header">
+          <span class="progress-label" id="q-progress-label">Question 1 of 12</span>
+          <span class="progress-pct" id="q-progress-pct">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+      </div>
+
+      <div class="q-section-tag" id="q-section-tag"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options-list" id="q-options"></div>
+
+      <div class="nav-bar">
+        <span class="nav-info" id="q-domain-info"></span>
+        <div class="nav-btns">
+          <button class="btn-nav" id="btn-back" onclick="goBack()">Back</button>
+          <button class="btn-nav btn-nav-primary" id="btn-next" onclick="goNext()" disabled>Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RESULTS SCREEN ════════════════════════════════════ -->
+<div id="screen-results" class="screen">
+  <div class="container">
+    <div class="results-wrap">
+
+      <div class="results-top">
+        <div class="score-ring-wrap">
+          <svg width="130" height="130" viewBox="0 0 130 130" aria-hidden="true">
+            <circle cx="65" cy="65" r="54" fill="none" stroke="#E5E7EB" stroke-width="8"/>
+            <circle id="ring-fill" cx="65" cy="65" r="54" fill="none"
+              stroke="#0D7E8C" stroke-width="8" stroke-linecap="round"
+              stroke-dasharray="339.3" stroke-dashoffset="339.3"
+              transform="rotate(-90 65 65)"
+              style="transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)"/>
+            <text id="ring-pct" x="65" y="60" text-anchor="middle"
+              font-family="'Playfair Display', Georgia, serif"
+              font-size="26" font-weight="500" fill="#1C3553">0%</text>
+            <text x="65" y="79" text-anchor="middle"
+              font-family="'DM Sans', sans-serif"
+              font-size="11" fill="#6B7280" font-weight="300">readiness</text>
+          </svg>
+          <div class="score-ring-label">Overall score</div>
+        </div>
+
+        <div>
+          <div class="result-tier" id="res-tier-badge"></div>
+          <h2 class="result-headline" id="res-headline"></h2>
+          <p class="result-body" id="res-body"></p>
+        </div>
+      </div>
+
+      <p class="results-section-head">Readiness by domain</p>
+      <div class="bar-grid" id="bar-grid"></div>
+
+      <p class="results-section-head">Priority gaps identified</p>
+      <div class="gap-cards" id="gap-cards"></div>
+
+      <div class="cta-block">
+        <p class="cta-eyebrow">DecAid · Package B</p>
+        <h3 class="cta-title">RTR &amp; Open Banking Readiness Review</h3>
+        <p class="cta-body" id="cta-body"></p>
+        <div class="cta-scope">
+          <div class="cta-scope-item"><div class="cta-scope-dot"></div>RTR connectivity options: DSP vs direct vs federated models</div>
+          <div class="cta-scope-item"><div class="cta-scope-dot"></div>Liquidity obligation modelling and capital planning</div>
+          <div class="cta-scope-item"><div class="cta-scope-dot"></div>Open banking accreditation pathway and sequencing</div>
+          <div class="cta-scope-item"><div class="cta-scope-dot"></div>Member data strategy tied to primacy outcomes</div>
+          <div class="cta-scope-item"><div class="cta-scope-dot"></div>Fintech partnership governance framework</div>
+          <div class="cta-scope-item"><div class="cta-scope-dot"></div>Board-ready roadmap with assigned owners and timelines</div>
+        </div>
+        <p class="cta-body" style="margin-bottom:1.5rem;font-size:14px;">
+          Engagement duration: 5–7 weeks &nbsp;·&nbsp; Investment: $22,000–$35,000
+        </p>
+        <div class="cta-actions">
+          <a href="mailto:info@decaid.ca?subject=Package B Discovery Call Request — RTR %26 Open Banking Readiness&body=I recently completed the DecAid RTR %26 Open Banking Readiness Assessment and would like to discuss a Package B engagement. Please contact me to schedule a discovery call." class="btn-cta-primary">
+            Request a discovery call
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://decaid.ca" class="btn-cta-secondary">Visit DecAid.ca</a>
+        </div>
+      </div>
+
+      <div class="restart-row">
+        <button class="btn-restart" onclick="restart()">← Start the assessment over</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">DecAid Advisory</div>
+      <div class="footer-text" style="margin-top:4px;">Member primacy research &amp; credit union competitive strategy</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://decaid.ca" class="footer-link">decaid.ca</a>
+      <a href="mailto:info@decaid.ca" class="footer-link">info@decaid.ca</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const SECTIONS = {
+  rtr:  { label: "RTR connectivity & access strategy",      color: "#0D7E8C" },
+  ob:   { label: "Open banking readiness",                  color: "#1C3553" },
+  data: { label: "Member data & primacy",                   color: "#C25F2A" },
+  inst: { label: "Infrastructure & institutional readiness", color: "#854F0B" }
+};
+
+const SECTION_GAPS = {
+  rtr: {
+    title: "RTR connectivity strategy",
+    desc: "No confirmed path to RTR access. Liquidity obligations, the DSP vs direct Payments Canada membership decision, and connectivity timelines are unresolved. This is the most time-sensitive gap — Q3–late 2026 is approaching and the build timeline is not short."
+  },
+  ob: {
+    title: "Open banking response",
+    desc: "No defined Consumer-Driven Banking strategy. The screen-scraping prohibition and accreditation pathway create a finite transition window. Institutions without an approved strategy will face a harder, costlier adjustment as the window narrows."
+  },
+  data: {
+    title: "Member data & primacy architecture",
+    desc: "Member data governance and consent frameworks are not open banking-ready. Without a member primacy-connected data strategy, open banking becomes a compliance burden rather than a competitive opportunity."
+  },
+  inst: {
+    title: "Infrastructure & partnership governance",
+    desc: "API readiness gaps and the absence of a fintech governance framework will slow open banking participation. These gaps compound: poor governance leads to poor partnership decisions at the worst possible moment."
+  }
+};
+
+const QUESTIONS = [
+  { section: "rtr", text: "How would you describe your credit union's current RTR connectivity plan?",
+    options: [
+      { main: "No plan in place",                  note: "We have not begun assessing our options",                                                     score: 1 },
+      { main: "Monitoring developments",            note: "We expect to connect through our existing DSP but have not confirmed this",                     score: 2 },
+      { main: "Options under active evaluation",    note: "We are assessing DSP-mediated access vs direct Payments Canada membership",                    score: 3 },
+      { main: "Confirmed connectivity path",        note: "Our approach is decided and operationalization has begun",                                      score: 4 }
+    ]
+  },
+  { section: "rtr", text: "Have you quantified the liquidity requirements RTR participation will impose on your institution?",
+    options: [
+      { main: "Not on our radar",                   note: "We were not aware this was a material capital consideration",                                   score: 1 },
+      { main: "Aware but unquantified",             note: "We know it is an issue but have not modelled the impact",                                      score: 2 },
+      { main: "Preliminary analysis completed",     note: "We have an estimate but have not finalized our liquidity strategy",                            score: 3 },
+      { main: "Fully modelled and planned",         note: "We have a board-approved liquidity strategy for RTR participation",                            score: 4 }
+    ]
+  },
+  { section: "rtr", text: "How well does your leadership team understand the tradeoffs between DSP-mediated RTR access and direct Payments Canada membership?",
+    options: [
+      { main: "Not differentiated",                 note: "We have not explored the distinction",                                                          score: 1 },
+      { main: "Broadly aware",                      note: "We have heard about it but have not evaluated the tradeoffs",                                   score: 2 },
+      { main: "Both models evaluated",              note: "We understand the economics and governance implications of each",                               score: 3 },
+      { main: "Decision made",                      note: "We have chosen our model and understand what it means for our institution",                     score: 4 }
+    ]
+  },
+  { section: "ob", text: "How would you characterize your credit union's open banking strategy?",
+    options: [
+      { main: "No strategy exists",                 note: "We do not have a defined position on open banking",                                             score: 1 },
+      { main: "Monitoring phase",                   note: "We are aware of the Consumer-Driven Banking framework but have not defined a response",         score: 2 },
+      { main: "Strategy in development",            note: "We have a draft strategy under board discussion",                                               score: 3 },
+      { main: "Board-approved strategy",            note: "We have a defined, approved open banking strategy with assigned owners",                        score: 4 }
+    ]
+  },
+  { section: "ob", text: "Have you assessed the impact of the upcoming screen-scraping prohibition on your current data-sharing arrangements?",
+    options: [
+      { main: "Unaware of the prohibition",         note: "We were not aware a ban on credential-based data access was coming",                            score: 1 },
+      { main: "Aware but unassessed",               note: "We know it is coming but have not evaluated our exposure",                                     score: 2 },
+      { main: "Impact assessed",                    note: "We have identified which arrangements are affected and what needs to change",                   score: 3 },
+      { main: "Migration plan confirmed",           note: "We have a plan to transition to accredited API access before the prohibition takes effect",     score: 4 }
+    ]
+  },
+  { section: "ob", text: "Have you mapped your pathway to accreditation under the Consumer-Driven Banking framework?",
+    options: [
+      { main: "Not started",                        note: "We have not looked at accreditation requirements",                                              score: 1 },
+      { main: "Tracking requirements",              note: "We are monitoring the framework but have not begun planning",                                   score: 2 },
+      { main: "Pathway mapped",                     note: "We understand what accreditation requires and have a plan",                                    score: 3 },
+      { main: "Process underway",                   note: "We are actively engaged with the accreditation pathway",                                       score: 4 }
+    ]
+  },
+  { section: "data", text: "Does your credit union have a member data strategy that connects data access to member outcomes?",
+    options: [
+      { main: "No member data strategy",            note: "Data initiatives exist but are not connected to a coherent strategy",                          score: 1 },
+      { main: "Point initiatives without strategy", note: "We have isolated data projects but no unified member data framework",                           score: 2 },
+      { main: "Strategy exists, not primacy-linked",note: "We have a data strategy but it is not grounded in member outcomes",                            score: 3 },
+      { main: "Integrated member data strategy",    note: "Our data strategy is tied to member primacy and has executive ownership",                      score: 4 }
+    ]
+  },
+  { section: "data", text: "Do you have member consent frameworks and data governance policies designed for open banking?",
+    options: [
+      { main: "None developed",                     note: "We have basic privacy policies but nothing specific to open banking consent",                   score: 1 },
+      { main: "Basic privacy policies only",        note: "Not yet adapted to open banking consent and governance requirements",                           score: 2 },
+      { main: "Frameworks in development",          note: "We are actively building consent architecture for open banking",                               score: 3 },
+      { main: "Frameworks in place",                note: "We have consent and governance policies ready for open banking launch",                        score: 4 }
+    ]
+  },
+  { section: "data", text: "How confident is your board in your competitive position as RTR and open banking launch simultaneously in 2026?",
+    options: [
+      { main: "Not discussed at board level",       note: "These topics have not reached the board agenda",                                               score: 1 },
+      { main: "Board aware, limited clarity",       note: "The board knows change is coming but lacks a clear picture of our position",                   score: 2 },
+      { main: "Board briefed",                      note: "We have presented to the board and they understand the implications",                          score: 3 },
+      { main: "Board-confident strategy",           note: "The board has approved a strategy and monitors progress against it",                           score: 4 }
+    ]
+  },
+  { section: "inst", text: "Is your core banking and digital platform API-ready for open banking integration?",
+    options: [
+      { main: "Unknown — not assessed",             note: "We have not evaluated our API readiness",                                                      score: 1 },
+      { main: "Gaps identified, not mapped",        note: "We know there are gaps but have not defined them specifically",                                score: 2 },
+      { main: "Gaps mapped with roadmap",           note: "We have assessed our gaps and have a plan to close them",                                     score: 3 },
+      { main: "API-ready or confirmed roadmap",     note: "We are ready or have a concrete plan with committed timelines",                               score: 4 }
+    ]
+  },
+  { section: "inst", text: "Does your credit union have a documented governance framework for fintech and payments partnerships?",
+    options: [
+      { main: "No framework — ad hoc decisions",   note: "Partnerships are evaluated case-by-case without consistent criteria",                          score: 1 },
+      { main: "Informal processes only",            note: "We have informal processes but no documented governance",                                      score: 2 },
+      { main: "Framework in development",          note: "We are building a governance framework for fintech and payments partnerships",                 score: 3 },
+      { main: "Established governance framework",  note: "We have a documented, board-approved framework in active use",                                score: 4 }
+    ]
+  },
+  { section: "inst", text: "How would you rate your institution's overall payments modernization readiness relative to the sector?",
+    options: [
+      { main: "Behind — significant catch-up needed", note: "We recognize we are behind and need to accelerate meaningfully",                            score: 1 },
+      { main: "Roughly sector average",               note: "We are in line with most credit unions — making progress but not leading",                   score: 2 },
+      { main: "Slightly ahead",                       note: "We have made deliberate investments and are better positioned than most peers",               score: 3 },
+      { main: "Ahead — competitive advantage",        note: "Payments modernization is a genuine strategic differentiator for us",                        score: 4 }
+    ]
+  }
+];
+
+let current = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+
+function startAssessment() {
+  showScreen('screen-question');
+  renderQuestion();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  const total = QUESTIONS.length;
+  const pct = Math.round((current / total) * 100);
+
+  document.getElementById('q-progress-label').textContent = 'Question ' + (current + 1) + ' of ' + total;
+  document.getElementById('q-progress-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('q-section-tag').textContent = SECTIONS[q.section].label;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-domain-info').textContent = 'Domain: ' + Object.keys(SECTIONS).indexOf(q.section) + 1 + ' of 4';
+
+  const container = document.getElementById('q-options');
+  container.innerHTML = '';
+
+  q.options.forEach((opt, i) => {
+    const isSelected = answers[current] === i;
+    const div = document.createElement('div');
+    div.className = 'option' + (isSelected ? ' selected' : '');
+    div.setAttribute('role', 'radio');
+    div.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+    div.setAttribute('tabindex', '0');
+    div.innerHTML =
+      '<div class="radio"><div class="radio-inner"></div></div>' +
+      '<div class="option-content">' +
+        '<div class="option-main">' + escapeHtml(opt.main) + '</div>' +
+        '<div class="option-note">' + escapeHtml(opt.note) + '</div>' +
+      '</div>';
+    div.onclick = () => selectOption(i);
+    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOption(i); } };
+    container.appendChild(div);
+  });
+
+  document.getElementById('btn-next').disabled = answers[current] === null;
+  document.getElementById('btn-back').disabled = current === 0;
+  document.getElementById('btn-next').textContent = current === total - 1 ? 'View my results' : 'Next';
+}
+
+function selectOption(i) {
+  answers[current] = i;
+  document.querySelectorAll('.option').forEach((el, idx) => {
+    el.classList.toggle('selected', idx === i);
+    el.setAttribute('aria-checked', idx === i ? 'true' : 'false');
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function goNext() {
+  if (answers[current] === null) return;
+  if (current === QUESTIONS.length - 1) {
+    buildResults();
+    showScreen('screen-results');
+  } else {
+    current++;
+    renderQuestion();
+  }
+}
+
+function goBack() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+function buildResults() {
+  const secIds = Object.keys(SECTIONS);
+  const secScores = {}, secMax = {};
+  secIds.forEach(id => { secScores[id] = 0; secMax[id] = 0; });
+
+  QUESTIONS.forEach((q, i) => {
+    if (answers[i] !== null) secScores[q.section] += q.options[answers[i]].score;
+    secMax[q.section] += 4;
+  });
+
+  const total = secIds.reduce((a, id) => a + secScores[id], 0);
+  const maxTotal = secIds.reduce((a, id) => a + secMax[id], 0);
+  const pct = Math.round((total / maxTotal) * 100);
+
+  // Score ring animation
+  const circumference = 2 * Math.PI * 54;
+  const offset = circumference * (1 - pct / 100);
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    document.getElementById('ring-pct').textContent = pct + '%';
+  }, 150);
+
+  let tierClass, tierText, headline, body, ctaBody;
+  if (pct <= 45) {
+    tierClass = 'tier-critical'; tierText = 'Critical readiness gap · ' + pct + '%';
+    headline = 'Your institution has critical readiness gaps across multiple domains';
+    body = 'RTR and open banking will arrive before your institution is prepared to respond strategically. The simultaneous Q3–late 2026 launch creates compounding pressure — gaps in connectivity strategy, liquidity planning, and member data governance become increasingly costly to close as the window narrows. The institutions that define their strategy now will be in a fundamentally different position than those that wait.';
+    ctaBody = 'A Package B engagement works through your specific connectivity options, models the liquidity implications of RTR participation, maps your open banking accreditation pathway, and ties all of this to your member primacy strategy — producing a board-ready roadmap with assigned owners and clear timelines.';
+  } else if (pct <= 70) {
+    tierClass = 'tier-significant'; tierText = 'Significant gaps identified · ' + pct + '%';
+    headline = 'Your institution has a foundation but material gaps remain';
+    body = 'Your results show awareness and early-stage activity, but important gaps remain in strategy definition, governance, and execution readiness. RTR and open banking are not sequential challenges — they are arriving together in 2026. Institutions with unconfirmed connectivity strategies and no accreditation plan will find themselves reacting rather than leading, in a sector where first-mover positioning will matter.';
+    ctaBody = 'A Package B engagement fills the specific gaps your assessment identified — sharpening your RTR connectivity strategy, building out your open banking response plan, and ensuring your member data architecture is structured to turn regulatory change into competitive positioning.';
+  } else {
+    tierClass = 'tier-developing'; tierText = 'Developing readiness · ' + pct + '%';
+    headline = 'Your institution is better positioned than most — but meaningful gaps remain';
+    body = 'Your results reflect genuine progress on payments modernization. Even institutions ahead of the sector average are finding that the simultaneous RTR and open banking launch creates complexity that internal teams alone cannot fully anticipate — particularly around liquidity modelling, accreditation sequencing, and the member data architecture needed to capitalize on open banking rather than simply comply with it.';
+    ctaBody = 'A Package B engagement validates your current strategy, surfaces the blind spots that tend to emerge closest to launch, and produces a tightened roadmap that gives your board confidence you are genuinely positioned to lead — not simply moving ahead of a slow-moving sector.';
+  }
+
+  document.getElementById('res-tier-badge').className = 'result-tier ' + tierClass;
+  document.getElementById('res-tier-badge').textContent = tierText;
+  document.getElementById('res-headline').textContent = headline;
+  document.getElementById('res-body').textContent = body;
+  document.getElementById('cta-body').textContent = ctaBody;
+
+  // Bars
+  const barGrid = document.getElementById('bar-grid');
+  barGrid.innerHTML = '';
+  secIds.forEach(id => {
+    const sp = Math.round((secScores[id] / secMax[id]) * 100);
+    const color = SECTIONS[id].color;
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML =
+      '<div class="bar-name">' + escapeHtml(SECTIONS[id].label) + '</div>' +
+      '<div class="bar-track"><div class="bar-fill" data-pct="' + sp + '" style="background:' + color + '"></div></div>' +
+      '<div class="bar-pct">' + sp + '%</div>';
+    barGrid.appendChild(row);
+  });
+
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 200);
+
+  // Gap cards
+  const gapCards = document.getElementById('gap-cards');
+  gapCards.innerHTML = '';
+  const prioritized = secIds
+    .map(id => ({ id, pct: Math.round((secScores[id] / secMax[id]) * 100) }))
+    .filter(x => x.pct < 80)
+    .sort((a, b) => a.pct - b.pct)
+    .slice(0, 4);
+
+  if (prioritized.length === 0) {
+    const card = document.createElement('div');
+    card.className = 'gap-card';
+    card.innerHTML = '<div class="gap-desc">No critical gaps identified. A Package B engagement can validate your current strategy, stress-test your assumptions, and surface any blind spots before the 2026 launch window.</div>';
+    gapCards.appendChild(card);
+  } else {
+    prioritized.forEach(({ id, pct: sp }) => {
+      const isCritical = sp < 45;
+      const meta = SECTION_GAPS[id];
+      const card = document.createElement('div');
+      card.className = 'gap-card';
+      card.innerHTML =
+        '<div class="gap-icon-wrap ' + (isCritical ? 'gap-icon-critical' : 'gap-icon-warning') + '">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '</div>' +
+        '<div>' +
+          '<div class="gap-label ' + (isCritical ? 'gap-label-critical' : 'gap-label-warning') + '">' +
+            (isCritical ? 'Critical gap' : 'Significant gap') + ' · ' + sp + '% ready' +
+          '</div>' +
+          '<div class="gap-title">' + escapeHtml(meta.title) + '</div>' +
+          '<div class="gap-desc">' + escapeHtml(meta.desc) + '</div>' +
+        '</div>';
+      gapCards.appendChild(card);
+    });
+  }
+}
+
+function restart() {
+  current = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+  document.getElementById('ring-pct').textContent = '0%';
+  showScreen('screen-intro');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
