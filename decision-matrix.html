@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credit Union Strategic Investment Decision Matrix | DecAid Consulting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --sage:   #A8B9B2; --fern: #718D7F; --canopy: #456D60; --forest: #0A4231;
+      --linen:  #F4F1EC; --stone: #D9D2C5; --bark: #3D3930;
+      --sblue:  #5B86A0; --sdark: #2D5470;
+      --rose:   #C98B8B; --rwood: #8C3D3D;
+      --bg:     #0e2b22; --bgm: #112a21; --bgc: #163528;
+      --bdr:    #1f4a38; --bdrh: #456D60;
+      --tp:     #F4F1EC; --tm: #8aaa9c;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--tp); min-height:100vh; line-height:1.5; }
+
+    /* Header */
+    .hdr { background:linear-gradient(150deg,var(--forest) 0%,#1a4a37 60%,var(--canopy) 100%); border-bottom:3px solid var(--fern); padding:28px 40px 24px; }
+    .hdr-in { max-width:980px; margin:0 auto; display:flex; align-items:flex-start; gap:20px; }
+    .wm { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:var(--linen); line-height:1; flex-shrink:0; }
+    .wm span { color:var(--sage); font-weight:400; }
+    .hvr { width:1px; height:46px; background:var(--fern); flex-shrink:0; margin-top:2px; }
+    .hcopy { flex:1; }
+    .hcopy .ey { font-size:10px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--sage); margin-bottom:5px; }
+    .hcopy h1 { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; color:var(--linen); line-height:1.25; }
+    .hcopy .sh { font-size:13px; color:var(--fern); margin-top:5px; font-style:italic; }
+    .badge { background:var(--canopy); color:var(--linen); font-size:9px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; padding:4px 10px; border-radius:2px; border:1px solid var(--fern); white-space:nowrap; flex-shrink:0; }
+
+    /* Intro */
+    .intro { background:var(--bgm); border-bottom:1px solid var(--bdr); padding:14px 40px; }
+    .intro p { max-width:980px; margin:0 auto; font-size:13px; color:var(--tm); line-height:1.7; }
+    .intro strong { color:var(--sage); font-weight:500; }
+
+    /* How it works */
+    .how { background:var(--bgc); border-bottom:1px solid var(--bdr); padding:16px 40px; }
+    .how-in { max-width:980px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .hs { display:flex; align-items:flex-start; gap:12px; }
+    .hn { width:26px; height:26px; border-radius:50%; background:var(--canopy); color:var(--linen); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .ht strong { font-size:12px; font-weight:600; color:var(--sage); display:block; margin-bottom:2px; }
+    .ht span { font-size:11px; color:var(--tm); line-height:1.5; }
+
+    /* Main */
+    .main { max-width:980px; margin:0 auto; padding:32px 40px 60px; }
+    .slbl { font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--sage); margin-bottom:10px; }
+
+    /* Step 1 */
+    .s1 { margin-bottom:32px; }
+    .sw { position:relative; }
+    .sw::after { content:'▾'; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--fern); pointer-events:none; font-size:14px; }
+    select.isel { width:100%; background:var(--bgc); border:1px solid var(--bdr); color:var(--tp); font-family:'DM Sans',sans-serif; font-size:14px; padding:13px 40px 13px 16px; border-radius:4px; outline:none; cursor:pointer; appearance:none; -webkit-appearance:none; transition:border-color .2s; }
+    select.isel:focus { border-color:var(--fern); }
+    select.isel option, select.isel optgroup { background:#163528; }
+    .cw { margin-top:8px; display:none; }
+    input.ci { width:100%; background:var(--bgc); border:1px solid var(--fern); color:var(--tp); font-family:'DM Sans',sans-serif; font-size:14px; padding:12px 16px; border-radius:4px; outline:none; }
+    input.ci::placeholder { color:var(--tm); }
+
+    /* Step 2 */
+    .s2 { margin-bottom:28px; }
+    .chr { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .pw { display:flex; align-items:center; gap:10px; }
+    .pt { width:120px; height:5px; background:var(--bdr); border-radius:3px; overflow:hidden; }
+    .pf { height:100%; background:var(--fern); border-radius:3px; transition:width .3s ease; }
+    .pl { font-size:11px; color:var(--tm); white-space:nowrap; }
+    .pl strong { color:var(--sage); }
+    .cinstr { background:rgba(69,109,96,.12); border:1px solid rgba(113,141,127,.3); border-radius:4px; padding:10px 14px; margin-bottom:14px; font-size:12px; color:var(--sage); line-height:1.55; }
+    .cinstr strong { color:var(--linen); }
+    .cgrid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .cc { background:var(--bgc); border:1px solid var(--bdr); border-radius:6px; padding:14px 15px; transition:border-color .2s; position:relative; }
+    .cc:hover { border-color:var(--bdrh); }
+    .cc.ns { border-color:rgba(201,139,139,.6); }
+    .cc.ok { border-color:rgba(69,109,96,.55); }
+    .cc.ns::after { content:''; position:absolute; top:11px; right:11px; width:7px; height:7px; border-radius:50%; background:var(--rose); animation:pulse 1.4s ease infinite; }
+    .cc.ok::after  { content:'✓'; position:absolute; top:9px; right:11px; font-size:11px; color:var(--fern); font-weight:700; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
+    .cn { font-size:12px; font-weight:600; color:var(--tp); line-height:1.35; padding-right:26px; margin-bottom:10px; }
+    .ctip { position:absolute; top:12px; right:12px; font-size:10px; color:var(--tm); cursor:help; padding:1px 5px; border:1px solid var(--bdr); border-radius:50%; line-height:1.55; }
+    .sr { display:flex; gap:5px; }
+    .sb { flex:1; padding:7px 4px; border:1px solid var(--bdr); background:transparent; color:var(--tm); font-family:'DM Sans',sans-serif; font-size:10px; font-weight:500; border-radius:3px; cursor:pointer; transition:all .15s; text-align:center; line-height:1.25; }
+    .sb:hover { border-color:var(--fern); color:var(--sage); }
+    .sb.s1a { background:rgba(140,61,61,.18); border-color:var(--rwood); color:#d47070; }
+    .sb.s2a { background:rgba(91,134,160,.18); border-color:var(--sblue); color:#8cb4d0; }
+    .sb.s3a { background:rgba(69,109,96,.22); border-color:var(--canopy); color:var(--sage); }
+
+    /* Step 3 */
+    .wp { background:var(--bgc); border:1px solid var(--bdr); border-radius:6px; padding:16px 20px; margin-bottom:24px; }
+    .wt { display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; }
+    .wt .wlbl { font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--sage); flex:1; }
+    .wt .wdesc { font-size:11px; color:var(--tm); font-style:italic; }
+    .wchev { font-size:12px; color:var(--fern); transition:transform .2s; }
+    .wt.open .wchev { transform:rotate(180deg); }
+    .wb { display:none; margin-top:16px; }
+    .wb.open { display:block; }
+    .wr { display:flex; align-items:center; gap:12px; margin-bottom:9px; }
+    .wn { font-size:11px; color:var(--tm); width:195px; flex-shrink:0; }
+    input[type=range].wsl { flex:1; -webkit-appearance:none; appearance:none; height:3px; border-radius:2px; background:var(--bdr); outline:none; cursor:pointer; }
+    input[type=range].wsl::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--fern); cursor:pointer; }
+    .wv { font-size:11px; color:var(--sage); font-weight:600; width:32px; text-align:right; }
+    .wnote { font-size:11px; color:var(--tm); font-style:italic; margin-top:12px; padding-top:10px; border-top:1px solid var(--bdr); }
+
+    /* Run */
+    .rbtn { width:100%; padding:16px; background:linear-gradient(135deg,var(--canopy) 0%,var(--fern) 100%); color:var(--linen); font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; border:none; border-radius:4px; cursor:pointer; transition:opacity .2s,transform .1s; margin-bottom:0; }
+    .rbtn:hover { opacity:.88; transform:translateY(-1px); }
+    .rbtn:active { transform:translateY(0); }
+    .vmsg { margin-top:10px; padding:11px 14px; background:rgba(140,61,61,.18); border:1px solid rgba(140,61,61,.45); border-radius:4px; font-size:12px; color:#d47070; line-height:1.6; display:none; }
+
+    /* Result */
+    #resultSection { margin-top:36px; display:none; }
+    .rdivider { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    .rdivider::before,.rdivider::after { content:''; flex:1; height:1px; background:var(--fern); }
+    .rdivider span { font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--fern); white-space:nowrap; }
+    .rpanel { background:var(--bgc); border:2px solid var(--fern); border-radius:8px; overflow:hidden; }
+    .rhead { padding:20px 24px; background:linear-gradient(135deg,var(--forest) 0%,#1a3d2e 100%); border-bottom:1px solid var(--bdr); display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+    .rico { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+    .rpname { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; color:var(--linen); line-height:1.2; }
+    .rpsub { font-size:11px; color:var(--sage); margin-top:3px; letter-spacing:.08em; text-transform:uppercase; }
+    .sblock { margin-left:auto; text-align:right; flex-shrink:0; }
+    .snum { font-family:'Playfair Display',serif; font-size:38px; font-weight:700; line-height:1; }
+    .slblr { font-size:10px; color:var(--tm); text-transform:uppercase; letter-spacing:.1em; margin-top:2px; }
+    .rbody { padding:22px 24px; }
+    .rrat { font-size:13.5px; color:var(--tp); line-height:1.75; margin-bottom:20px; border-left:3px solid var(--canopy); padding-left:14px; }
+    .bgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:18px; }
+    .bi { background:var(--bgm); border:1px solid var(--bdr); border-radius:4px; padding:10px 13px; }
+    .bilbl { font-size:9px; color:var(--tm); text-transform:uppercase; letter-spacing:.1em; margin-bottom:4px; }
+    .biv { font-size:12px; font-weight:600; }
+    .hr { height:1px; background:var(--bdr); margin:18px 0; }
+    .plbl { font-size:10px; color:var(--tm); text-transform:uppercase; letter-spacing:.1em; margin-bottom:11px; }
+    .pbars { display:flex; flex-direction:column; gap:8px; }
+    .prow { display:flex; align-items:center; gap:11px; }
+    .pname { font-size:11px; color:var(--tm); width:220px; flex-shrink:0; }
+    .ptrack { flex:1; height:6px; background:var(--bgm); border-radius:3px; overflow:hidden; }
+    .pfill { height:100%; border-radius:3px; transition:width .7s cubic-bezier(.22,1,.36,1); }
+    .ppct { font-size:11px; font-weight:600; width:36px; text-align:right; }
+    .flags { display:flex; flex-wrap:wrap; gap:7px; }
+    .flag { font-size:10.5px; font-weight:500; padding:4px 11px; border-radius:20px; letter-spacing:.04em; }
+    .fr { background:rgba(140,61,61,.18); color:#d47070; border:1px solid rgba(140,61,61,.45); }
+    .fn { background:rgba(91,134,160,.18); color:#8cb4d0; border:1px solid rgba(91,134,160,.45); }
+    .fg { background:rgba(69,109,96,.22); color:var(--sage); border:1px solid rgba(69,109,96,.5); }
+    .resetrow { text-align:center; margin-top:18px; }
+    .rlnk { font-size:12px; color:var(--tm); text-decoration:underline; cursor:pointer; background:none; border:none; font-family:'DM Sans',sans-serif; }
+    .rlnk:hover { color:var(--sage); }
+
+    /* Footer */
+    footer { background:var(--bgm); border-top:1px solid var(--bdr); padding:20px 40px; margin-top:40px; }
+    .fin { max-width:980px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+    .fbrand { font-family:'Playfair Display',serif; font-size:14px; color:var(--fern); }
+    .fbrand span { color:var(--sage); font-weight:400; }
+    .flinks { display:flex; gap:18px; }
+    .flinks a { font-size:11px; color:var(--tm); text-decoration:none; }
+    .flinks a:hover { color:var(--sage); }
+    .fnote { font-size:11px; color:var(--tm); font-style:italic; width:100%; margin-top:8px; padding-top:10px; border-top:1px solid var(--bdr); }
+
+    @media(max-width:680px){
+      .hdr,.intro,.how,.main,footer{padding-left:20px;padding-right:20px;}
+      .hdr-in{flex-wrap:wrap;} .how-in{grid-template-columns:1fr;} .cgrid{grid-template-columns:1fr;} .bgrid{grid-template-columns:repeat(2,1fr);} .pname{width:140px;}
+    }
+  </style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="wm">DEC<span>AID</span></div>
+    <div class="hvr"></div>
+    <div class="hcopy">
+      <p class="ey">DecAid Research Framework</p>
+      <h1>Credit Union Strategic Investment Decision Matrix</h1>
+      <p class="sh">Evaluate any initiative against the criteria that matter most to member primacy and financial sustainability.</p>
+    </div>
+    <div class="badge">Beta v1.0</div>
+  </div>
+</header>
+
+<div class="intro">
+  <p>This tool helps credit union leaders structure thinking on major investment decisions — from <strong>Real-Time Rail participation</strong> to <strong>Consumer-Driven Banking readiness</strong> to <strong>digital platform transitions</strong>. Select an initiative, score each criterion, and receive a recommended strategic path with supporting rationale grounded in the realities of the Canadian credit union system.</p>
+</div>
+
+<div class="how">
+  <div class="how-in">
+    <div class="hs"><div class="hn">1</div><div class="ht"><strong>Select an Initiative</strong><span>Choose the investment you want to evaluate from the dropdown list of common Canadian CU initiatives.</span></div></div>
+    <div class="hs"><div class="hn">2</div><div class="ht"><strong>Score All 8 Criteria</strong><span>For each criterion, click the option that best reflects your institution's position. All 8 must be rated before running.</span></div></div>
+    <div class="hs"><div class="hn">3</div><div class="ht"><strong>Receive Your Strategic Path</strong><span>The matrix calculates a strategic fit score and recommends one of five paths — Build, Partner, Share, Consolidate, or Defer — with full rationale.</span></div></div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- STEP 1 -->
+  <div class="s1">
+    <div class="slbl">Step 1 — Select the Initiative Under Evaluation</div>
+    <div class="sw">
+      <select class="isel" id="isel" onchange="onInitChange(this.value)">
+        <option value="" disabled selected>— Select an initiative —</option>
+        <optgroup label="Payments Modernization">
+          <option>Real-Time Rail (RTR) Participation</option>
+          <option>RTR Indirect Participation via Service Provider</option>
+          <option>ISO 20022 Messaging Standards Migration</option>
+          <option>Interac e-Transfer Enhancement / AFT Modernization</option>
+          <option>Lynx High-Value Payments Integration</option>
+          <option>Direct-to-Interac Connectivity</option>
+          <option>Payments Fraud Management Infrastructure</option>
+        </optgroup>
+        <optgroup label="Consumer-Driven Banking (CDB)">
+          <option>Consumer-Driven Banking (CDB) Framework Readiness</option>
+          <option>CDB API Gateway — Member Data Consent Infrastructure</option>
+          <option>CDB Accredited Third-Party Provider (ATSP) Strategy</option>
+          <option>CDB-Enabled Fintech Partnership (Data Sharing)</option>
+        </optgroup>
+        <optgroup label="Digital Banking Transformation">
+          <option>Digital Banking Platform Transition (post-Forge / Member Direct)</option>
+          <option>Mobile &amp; App Experience Overhaul</option>
+          <option>AI-Driven Member Service &amp; Personalization</option>
+          <option>Digital Onboarding &amp; Account Opening Modernization</option>
+          <option>Data &amp; Analytics Platform Build-out</option>
+        </optgroup>
+        <optgroup label="Core Infrastructure">
+          <option>Core Banking System Modernization</option>
+          <option>Cloud Migration / Hosting Strategy</option>
+          <option>Cybersecurity &amp; Risk Management Program</option>
+          <option>API-First Architecture / Integration Layer</option>
+        </optgroup>
+        <optgroup label="Fintech &amp; Ecosystem Partnerships">
+          <option>Fintech Partnership — Payments Capability</option>
+          <option>Fintech Partnership — Lending / Credit Decisioning</option>
+          <option>Fintech Partnership — Embedded Financial Services</option>
+          <option>CUSO / Shared Services Investment</option>
+          <option>Shared Infrastructure / Utility Participation (Pooled Model)</option>
+        </optgroup>
+        <optgroup label="Member Growth &amp; Primacy">
+          <option>Commercial Member Acquisition &amp; Primacy Strategy</option>
+          <option>Member Lifetime Value (LTV) Program</option>
+          <option>Newcomer / New Canadian Member Strategy</option>
+          <option>Youth &amp; Gen Z Member Acquisition Program</option>
+          <option>Deposit Primacy &amp; Low-Cost Deposit Growth Initiative</option>
+        </optgroup>
+        <optgroup label="Efficiency &amp; Operations">
+          <option>Efficiency Ratio Reduction Initiative</option>
+          <option>Branch Network Rationalization</option>
+          <option>Back-Office Automation / Process Modernization</option>
+          <option>AI-Assisted Operations &amp; Cost Reduction</option>
+        </optgroup>
+        <optgroup label="Consolidation &amp; Strategic Structure">
+          <option>Merger / Consolidation Feasibility Assessment</option>
+          <option>Post-Merger Integration Planning</option>
+          <option>Strategic Alliance / Collaboration Agreement</option>
+        </optgroup>
+        <optgroup label="──────────────────────">
+          <option value="__other__">Other — enter below</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="cw" id="cw">
+      <input class="ci" id="ci" type="text" placeholder="Describe the initiative or investment you are evaluating...">
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="s2">
+    <div class="chr">
+      <div class="slbl" style="margin-bottom:0">Step 2 — Rate Each Criterion &nbsp;<span style="color:var(--rose);font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;">(all 8 required)</span></div>
+      <div class="pw">
+        <div class="pt"><div class="pf" id="pfill" style="width:0%"></div></div>
+        <div class="pl" id="plbl"><strong>0</strong> of 8 rated</div>
+      </div>
+    </div>
+    <div class="cinstr"><strong>Instructions:</strong> Click one button per row — left option = low or challenging, right option = high or favourable for your institution. Hover the <strong>?</strong> badge on any card for guidance. A green ✓ confirms each rating.</div>
+    <div class="cgrid" id="cgrid"></div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="wp">
+    <div class="wt" id="wtog" onclick="togW()">
+      <span class="wlbl">Step 3 — Adjust Strategic Weights &nbsp;<span class="wdesc">(optional — expand to customise)</span></span>
+      <span class="wchev">▾</span>
+    </div>
+    <div class="wb" id="wbody"><div id="wcont"></div>
+      <p class="wnote">Increase the weight on criteria most relevant to your institution's strategic priorities. Defaults reflect typical Canadian credit union trade-offs.</p>
+    </div>
+  </div>
+
+  <!-- RUN -->
+  <button class="rbtn" onclick="runEval()">▶&nbsp;&nbsp;Run Strategic Evaluation</button>
+  <div class="vmsg" id="vmsg"></div>
+
+  <!-- RESULT — always in DOM, shown/hidden via JS style.display -->
+  <div id="resultSection">
+    <div class="rdivider"><span>Your Strategic Evaluation Result</span></div>
+    <div class="rpanel">
+      <div class="rhead" id="rhead"></div>
+      <div class="rbody" id="rbody"></div>
+    </div>
+    <div class="resetrow"><button class="rlnk" onclick="doReset()">← Clear and start a new evaluation</button></div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="fin">
+    <div class="fbrand">DEC<span>AID</span> Consulting Inc.</div>
+    <div class="flinks">
+      <a href="https://decaidconsulting.com" target="_blank">decaidconsulting.com</a>
+      <a href="mailto:iscott@decaidconsulting.com">Contact DecAid</a>
+    </div>
+    <p class="fnote">For advisory use only. This tool provides a structured framework for executive discussion and does not constitute financial, legal, or regulatory advice. &copy; 2026 DecAid Consulting Inc.</p>
+  </div>
+</footer>
+
+<script>
+var CRITERIA = [
+  {id:'mp',  name:'Member Primacy Impact',               tip:'Does this initiative directly advance the credit union\'s position at the centre of a member\'s financial life — earned by choice, not habit or inertia?',                                                      lbl:['Peripheral','Supporting','Core Driver'],              w:2.0},
+  {id:'er',  name:'Efficiency Ratio Impact',             tip:'Expected contribution to improving the operating efficiency ratio within 3 years. The Big 5 Canadian banks average ~48%; most credit unions are materially higher.',                                             lbl:['Neutral / Cost Add','Moderate Gain','Significant Gain'], w:1.5},
+  {id:'cd',  name:'Competitive Differentiation',         tip:'Is this a utility — shared, non-differentiating infrastructure — or a true member-facing competitive advantage that members would choose your credit union for?',                                                lbl:['Pure Utility','Partial Diff.','True Differentiator'],  w:1.5},
+  {id:'sd',  name:'Scale Dependency',                    tip:'How much does ROI depend on institutional scale? High scale dependency (e.g., payments rails) favours a shared or utility model rather than standalone investment.',                                            lbl:['High Scale Need','Moderate','Scale-Independent'],      w:1.25},
+  {id:'bc',  name:'Internal Build Capability',           tip:'Does the institution have the talent, systems, and budget to build and sustain this in-house — without diverting management attention from core member-facing operations?',                                      lbl:['No Capability','Partial','Strong Capability'],         w:1.0},
+  {id:'tv',  name:'Time to Value',                       tip:'How quickly can this initiative deliver measurable member or financial benefit after implementation? Shorter time to value reduces execution risk and opportunity cost.',                                          lbl:['> 3 Years','1 – 3 Years','< 12 Months'],               w:1.0},
+  {id:'rc',  name:'Regulatory & Compliance Complexity',  tip:'How complex is the compliance environment? Consider RPAA registration, Consumer-Driven Banking Act obligations, OSFI guidance, and provincial regulatory requirements.',                                         lbl:['High Complexity','Moderate','Low Complexity'],         w:1.0},
+  {id:'dv',  name:'Member Data & Insight Value',         tip:'Does this generate proprietary member data that deepens the relationship? Data fragmented across multiple providers loses strategic value — consolidated member data is a primacy enabler.',                     lbl:['Low Data Value','Moderate','High Data Value'],         w:1.25}
+];
+
+var PATH_CFG = {
+  'Build Internally':                  {icon:'🏗️', col:'#718D7F', bg:'rgba(69,109,96,0.2)',    rat:'This initiative scores strongly on internal capability and competitive differentiation. The potential to build a proprietary advantage — one that directly reinforces member primacy — justifies the investment. Tie the build to a specific business case (revenue, member experience, or data), not a technology-only play. Design planning that simplifies existing products before migration reduces risk and overrun. Set clear stage gates and guard against scope creep.'},
+  'Fintech Partnership':               {icon:'🤝', col:'#5B86A0', bg:'rgba(91,134,160,0.2)',   rat:'The profile points toward a fintech partnership as the optimal path. Internal build capability is limited relative to the strategic ambition, and this initiative touches areas where specialized fintechs outperform generalist institutions. Most fintechs today solve narrow, well-defined problems — payments speed, onboarding friction, credit access, data visibility — better than any single credit union can alone. Prioritize governance: retain ownership of the member relationship and treat the partnership as a board-level commitment. Partnerships must serve primacy, not simply close a capability gap.'},
+  'Shared Infrastructure / Utility':   {icon:'⚙️', col:'#A8B9B2', bg:'rgba(168,185,178,0.15)', rat:'This initiative shows high scale dependency and low competitive differentiation — the signature profile of infrastructure that belongs in a shared utility model. Fragmented investment across institutions drives up unit cost, destroys data value, and creates operational inconsistency without competitive return. Advocate for industry-level coordination through shared services vehicles — CUSOs, Centrals, or joint ventures. The Prairie Payments Joint Venture is a cautionary example of what fragmented governance produces. Returns compound when cost is socialized and capability is standardized.'},
+  'Defer / Deprioritize':              {icon:'⏸️', col:'#8a9a8c', bg:'rgba(61,57,48,0.3)',     rat:'The current scoring does not support prioritizing this initiative in the near term. Member primacy impact and efficiency contribution are insufficient to justify resource allocation ahead of higher-scoring priorities. Revisit when the regulatory environment firms up — for example, as Consumer-Driven Banking framework timelines clarify — when a fintech or shared-service option reduces cost and risk, or when the institution achieves greater scale through consolidation. Deferral is a strategic choice, not a default.'},
+  'M&A / Scale-Driven Consolidation':  {icon:'🔗', col:'#C98B8B', bg:'rgba(201,139,139,0.18)', rat:'The initiative requires scale that the current institution cannot efficiently generate on a standalone basis. This is a signal to evaluate merger or consolidation options — not as ends in themselves, but as prerequisites for executing this investment with acceptable unit economics. Canadian credit union mergers are accelerating and getting larger; the $2B–$15B asset range is increasingly where sustainable capability investment becomes viable. Ensure any consolidation roadmap specifically addresses this capability gap in its post-merger integration planning.'}
+};
+
+var scores = {}, weights = {};
+CRITERIA.forEach(function(c){ scores[c.id]=null; weights[c.id]=c.w; });
+
+function init(){
+  // Render criteria cards
+  var g = document.getElementById('cgrid');
+  g.innerHTML = '';
+  CRITERIA.forEach(function(c){
+    var d = document.createElement('div');
+    d.className = 'cc';
+    d.id = 'cc-'+c.id;
+    d.innerHTML = '<div class="ctip" title="'+c.tip+'">?</div>'
+      + '<div class="cn">'+c.name+'</div>'
+      + '<div class="sr">'
+      + c.lbl.map(function(l,i){
+          return '<button class="sb" id="sb-'+c.id+'-'+(i+1)+'" onclick="pick(\''+c.id+'\','+(i+1)+')">'+l+'</button>';
+        }).join('')
+      + '</div>';
+    g.appendChild(d);
+  });
+  // Render weight sliders
+  var wc = document.getElementById('wcont');
+  wc.innerHTML = '';
+  CRITERIA.forEach(function(c){
+    var r = document.createElement('div');
+    r.className = 'wr';
+    r.innerHTML = '<div class="wn">'+c.name+'</div>'
+      + '<input type="range" class="wsl" min="0.5" max="3" step="0.25" value="'+c.w+'" oninput="updW(\''+c.id+'\',this.value)">'
+      + '<div class="wv" id="wv-'+c.id+'">'+c.w.toFixed(1)+'×</div>';
+    wc.appendChild(r);
+  });
+  updateProg();
+}
+
+function pick(id, val){
+  scores[id] = val;
+  for(var v=1;v<=3;v++){
+    var b = document.getElementById('sb-'+id+'-'+v);
+    b.className = 'sb' + (v===val ? ' s'+v+'a' : '');
+  }
+  var card = document.getElementById('cc-'+id);
+  card.classList.remove('ns');
+  card.classList.add('ok');
+  updateProg();
+  hideV();
+}
+
+function updW(id, val){
+  weights[id] = parseFloat(val);
+  document.getElementById('wv-'+id).textContent = parseFloat(val).toFixed(1)+'×';
+}
+
+function updateProg(){
+  var n = CRITERIA.filter(function(c){return scores[c.id]!==null;}).length;
+  document.getElementById('pfill').style.width = (n/CRITERIA.length*100)+'%';
+  document.getElementById('plbl').innerHTML = '<strong>'+n+'</strong> of 8 rated';
+}
+
+function togW(){
+  var t = document.getElementById('wtog'), b = document.getElementById('wbody');
+  t.classList.toggle('open'); b.classList.toggle('open');
+}
+
+function onInitChange(v){
+  document.getElementById('cw').style.display = v==='__other__' ? 'block' : 'none';
+  hideV();
+}
+
+function getInit(){
+  var s = document.getElementById('isel');
+  if(!s.value) return null;
+  if(s.value==='__other__') return document.getElementById('ci').value.trim()||'Custom Initiative';
+  return s.value;
+}
+
+function showV(msg){ var e=document.getElementById('vmsg'); e.textContent=msg; e.style.display='block'; }
+function hideV(){ document.getElementById('vmsg').style.display='none'; }
+
+function runEval(){
+  hideV();
+  try {
+    var init = getInit();
+    if(!init){
+      showV('Please select an initiative from the dropdown above before running the evaluation.');
+      document.getElementById('isel').focus();
+      return;
+    }
+    var missing = CRITERIA.filter(function(c){return scores[c.id]===null;});
+    if(missing.length){
+      CRITERIA.forEach(function(c){
+        var card = document.getElementById('cc-'+c.id);
+        if(scores[c.id]===null) card.classList.add('ns');
+      });
+      showV('Please rate all '+missing.length+' remaining criterion'+(missing.length>1?'ia':'ion')+' before running: '+missing.map(function(c){return c.name;}).join(', ')+'.');
+      document.getElementById('cc-'+missing[0].id).scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+
+    // Weighted score
+    var ws=0, tw=0;
+    CRITERIA.forEach(function(c){ ws+=(scores[c.id]/3)*100*weights[c.id]; tw+=weights[c.id]; });
+    var fs = Math.round(ws/tw);
+
+    var mp=scores.mp, cd=scores.cd, sd=scores.sd, bc=scores.bc, er=scores.er, rc=scores.rc;
+
+    var raw = {
+      'Build Internally':                 bc*20 + (cd===3?30:cd===2?15:0) + (mp===3?20:0),
+      'Fintech Partnership':              (4-bc)*15 + (mp>=2?25:0) + (cd>=2?20:0) + (sd===2?10:0),
+      'Shared Infrastructure / Utility':  (4-sd)*20 + (cd===1?30:0) + (rc===1?20:0) + (er>=2?15:0),
+      'Defer / Deprioritize':             (fs<35?60:fs<50?20:0) + (mp===1?25:0) + (er===1?20:0),
+      'M&A / Scale-Driven Consolidation': (4-sd)*10 + (4-bc)*10 + er*15
+    };
+
+    var mx = Math.max.apply(null, Object.keys(raw).map(function(k){return raw[k];}));
+    if(mx===0) mx=1;
+    var pcts = {};
+    Object.keys(raw).forEach(function(k){ pcts[k]=Math.round(raw[k]/mx*100); });
+    var sorted = Object.keys(pcts).sort(function(a,b){return pcts[b]-pcts[a];});
+    var top = sorted[0];
+    var cfg = PATH_CFG[top];
+    var sc = fs>=65?'#718D7F':fs>=45?'#5B86A0':'#C98B8B';
+
+    var flags=[];
+    if(sd===1)          flags.push({c:'fn',t:'Scale-sensitive: shared or utility model advisable'});
+    if(bc===1)          flags.push({c:'fr',t:'Low build capability — dependency on external partners'});
+    if(rc===1)          flags.push({c:'fn',t:'High regulatory complexity — consider shared compliance model'});
+    if(mp===3)          flags.push({c:'fg',t:'Strong member primacy signal'});
+    if(cd===1&&sd===1)  flags.push({c:'fn',t:'Utility candidate: pooled governance advisable'});
+    if(fs>=72)          flags.push({c:'fg',t:'High strategic fit — prioritize'});
+    if(fs<40)           flags.push({c:'fr',t:'Low composite fit — reassess strategic rationale'});
+
+    var bc2=function(v){return v===3?'#718D7F':v===2?'#5B86A0':'#C98B8B';};
+    var sc2=function(v){return v===1?'#C98B8B':v===2?'#5B86A0':'#718D7F';};
+    var mpL=['','Peripheral','Supporting','Core Driver'];
+    var erL=['','Neutral','Moderate Gain','Significant Gain'];
+    var cdL=['','Pure Utility','Partial','Differentiator'];
+    var sdL=['','High','Moderate','Low'];
+    var tvL=['','> 3 Years','1–3 Years','< 12 Months'];
+    var dvL=['','Low','Moderate','High'];
+
+    document.getElementById('rhead').innerHTML =
+      '<div class="rico" style="background:'+cfg.bg+'">'+cfg.icon+'</div>'
+      +'<div><div class="rpname">'+top+'</div><div class="rpsub">Recommended Path &middot; '+init+'</div></div>'
+      +'<div class="sblock"><div class="snum" style="color:'+sc+'">'+fs+'</div><div class="slblr">Strategic Fit Score</div></div>';
+
+    document.getElementById('rbody').innerHTML =
+      '<p class="rrat">'+cfg.rat+'</p>'
+      +'<div class="bgrid">'
+        +'<div class="bi"><div class="bilbl">Member Primacy</div><div class="biv" style="color:'+bc2(mp)+'">'+mpL[mp]+'</div></div>'
+        +'<div class="bi"><div class="bilbl">Efficiency Impact</div><div class="biv" style="color:'+bc2(scores.er)+'">'+erL[scores.er]+'</div></div>'
+        +'<div class="bi"><div class="bilbl">Differentiation</div><div class="biv" style="color:'+bc2(cd)+'">'+cdL[cd]+'</div></div>'
+        +'<div class="bi"><div class="bilbl">Scale Dependency</div><div class="biv" style="color:'+sc2(sd)+'">'+sdL[sd]+'</div></div>'
+        +'<div class="bi"><div class="bilbl">Time to Value</div><div class="biv" style="color:'+bc2(scores.tv)+'">'+tvL[scores.tv]+'</div></div>'
+        +'<div class="bi"><div class="bilbl">Data / Insight Value</div><div class="biv" style="color:'+bc2(scores.dv)+'">'+dvL[scores.dv]+'</div></div>'
+      +'</div>'
+      +'<div class="hr"></div>'
+      +'<div class="plbl">Path Suitability Analysis</div>'
+      +'<div class="pbars">'
+        +sorted.map(function(k){
+          return '<div class="prow">'
+            +'<div class="pname">'+k+'</div>'
+            +'<div class="ptrack"><div class="pfill" style="width:'+pcts[k]+'%;background:'+(k===top?cfg.col:'#1f4a38')+'"></div></div>'
+            +'<div class="ppct" style="color:'+(k===top?cfg.col:'var(--tm)')+'">'+pcts[k]+'%</div>'
+            +'</div>';
+        }).join('')
+      +'</div>'
+      +(flags.length?'<div class="hr"></div><div class="flags">'+flags.map(function(f){return '<span class="flag '+f.c+'">'+f.t+'</span>';}).join('')+'</div>':'');
+
+    // Show result — direct style manipulation, no class dependency
+    var rs = document.getElementById('resultSection');
+    rs.style.display = 'block';
+    rs.style.marginTop = '36px';
+
+    // Scroll into view with a small delay to ensure render
+    setTimeout(function(){
+      rs.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 80);
+
+  } catch(e) {
+    showV('An error occurred: '+e.message+'. Please try again or contact DecAid.');
+    console.error(e);
+  }
+}
+
+function doReset(){
+  CRITERIA.forEach(function(c){
+    scores[c.id]=null;
+    for(var v=1;v<=3;v++){
+      var b=document.getElementById('sb-'+c.id+'-'+v);
+      if(b) b.className='sb';
+    }
+    var card=document.getElementById('cc-'+c.id);
+    if(card){ card.classList.remove('ns','ok'); }
+  });
+  document.getElementById('isel').value='';
+  document.getElementById('ci').value='';
+  document.getElementById('cw').style.display='none';
+  document.getElementById('resultSection').style.display='none';
+  hideV();
+  updateProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Ensure DOM is fully ready before initialising
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
