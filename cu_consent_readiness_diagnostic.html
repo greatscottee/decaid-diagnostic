@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Union Consent Readiness Diagnostic — DecAid Consulting</title>
+<style>
+  :root {
+    --forest: #0A4231;
+    --canopy: #456D60;
+    --fern: #718D7F;
+    --sage: #A8B9B2;
+    --linen: #F4F1EC;
+    --stone: #D9D2C5;
+    --bark: #3D3930;
+    --slate: #5B86A0;
+    --deep-slate: #2D5470;
+    --ink: #1A1A18;
+    --muted: #5A5A54;
+    --border: #C8C4BB;
+    --amber: #BA7517;
+    --amber-lt: #FAEEDA;
+    --red: #A32D2D;
+    --red-lt: #FCEBEB;
+    --blue: #185FA5;
+    --blue-lt: #E6F1FB;
+    --green: #0F6E56;
+    --green-lt: #E1F5EE;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: var(--linen);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: var(--forest);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .header h1 {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    font-weight: normal;
+    color: #fff;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 12px;
+    color: var(--sage);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .decaid-mark {
+    font-size: 11px;
+    color: var(--sage);
+    text-align: right;
+    line-height: 1.5;
+  }
+  .decaid-mark strong {
+    display: block;
+    color: #fff;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  /* Progress bar */
+  .progress-strip {
+    background: var(--bark);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 38px;
+  }
+  .prog-label {
+    font-size: 11px;
+    color: var(--sage);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .prog-track {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: var(--fern);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .prog-count {
+    font-size: 12px;
+    color: var(--sage);
+    white-space: nowrap;
+  }
+
+  /* Main */
+  .main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 36px 40px 60px;
+  }
+
+  .intro-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: center;
+  }
+  .intro-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    padding-right: 20px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-big {
+    font-family: 'Georgia', serif;
+    font-size: 32px;
+    color: var(--forest);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .intro-text p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .intro-text strong { color: var(--ink); font-weight: normal; }
+
+  /* Section headers */
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+  }
+  .section-letter {
+    width: 28px; height: 28px;
+    background: var(--forest);
+    color: #fff;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-family: 'Georgia', serif;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 13px;
+    color: var(--forest);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--stone);
+  }
+
+  /* Question card */
+  .q-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .q-card.answered {
+    border-color: var(--fern);
+  }
+  .q-header {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--stone);
+  }
+  .q-num-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .q-num {
+    font-size: 10px;
+    color: var(--fern);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .q-reg {
+    font-size: 10px;
+    background: rgba(10,66,49,0.08);
+    color: var(--canopy);
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+  }
+  .q-text {
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: normal;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .q-context {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .q-options {
+    padding: 10px 20px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .opt-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    padding: 9px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--linen);
+    transition: all 0.15s;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .opt-label:hover {
+    background: #fff;
+    border-color: var(--fern);
+  }
+  .opt-label.selected {
+    background: var(--green-lt);
+    border-color: var(--green);
+    color: #085041;
+  }
+  .opt-label input[type=radio] {
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--green);
+  }
+  .opt-score {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--sage);
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .opt-label.selected .opt-score { color: var(--canopy); }
+
+  /* Submit */
+  .submit-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--stone);
+  }
+  .btn-primary {
+    background: var(--forest);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--canopy); }
+  .btn-primary:disabled { background: var(--sage); cursor: not-allowed; }
+  .submit-note {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Results */
+  #result-section { display: none; margin-top: 36px; }
+
+  .result-header {
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .result-tier {
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    font-weight: normal;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .result-score-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .score-fraction {
+    font-size: 14px;
+    font-weight: normal;
+  }
+  .score-bar-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(0,0,0,0.12);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.8s ease;
+  }
+  .score-pct {
+    font-size: 13px;
+    min-width: 38px;
+    text-align: right;
+  }
+  .result-summary {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* Domain scores */
+  .domain-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .domain-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px 16px;
+  }
+  .domain-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .domain-score {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    color: var(--forest);
+    margin-bottom: 4px;
+  }
+  .domain-bar-track {
+    height: 3px;
+    background: var(--stone);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .domain-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+
+  /* Gaps */
+  .gaps-section {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .gaps-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--stone);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--forest);
+  }
+  .gap-row {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    gap: 0;
+    border-bottom: 1px solid var(--stone);
+    align-items: start;
+  }
+  .gap-row:last-child { border-bottom: none; }
+  .gap-area {
+    padding: 12px 16px 12px 20px;
+    border-right: 1px solid var(--stone);
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: normal;
+    line-height: 1.4;
+  }
+  .gap-action {
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .gap-priority {
+    padding: 12px 20px 12px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+  .priority-badge {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  /* Next steps */
+  .next-steps {
+    background: var(--forest);
+    border-radius: 6px;
+    padding: 22px 26px;
+    margin-bottom: 20px;
+  }
+  .next-steps h3 {
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    font-weight: normal;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+  .next-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .next-card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 5px;
+    padding: 14px 16px;
+  }
+  .next-window {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sage);
+    margin-bottom: 6px;
+  }
+  .next-action {
+    font-size: 12px;
+    color: #fff;
+    line-height: 1.5;
+  }
+
+  /* CTA */
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--fern);
+    color: var(--forest);
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-outline:hover { background: var(--forest); color: #fff; border-color: var(--forest); }
+
+  /* Footer */
+  footer {
+    background: var(--bark);
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  footer p { font-size: 11px; color: var(--sage); }
+
+  @media (max-width: 700px) {
+    .header, .progress-strip, .main, footer { padding-left: 20px; padding-right: 20px; }
+    .domain-grid, .next-grid { grid-template-columns: 1fr; }
+    .gap-row { grid-template-columns: 1fr; }
+    .gap-area { border-right: none; border-bottom: 1px solid var(--stone); }
+    .gap-priority { justify-content: flex-start; padding: 0 0 12px 20px; }
+    .intro-card { grid-template-columns: 1fr; }
+    .intro-stats { border-right: none; border-bottom: 1px solid var(--border); padding: 0 0 16px; flex-direction: row; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Credit union consent readiness diagnostic</h1>
+    <div class="header-sub">7 questions · Canadian regulatory context · ~4 minutes</div>
+  </div>
+  <div class="decaid-mark">
+    <strong>DecAid Consulting</strong>
+    decaidconsulting.com
+  </div>
+</div>
+
+<div class="progress-strip">
+  <span class="prog-label">Progress</span>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  <span class="prog-count" id="prog-count">0 of 7 answered</span>
+</div>
+
+<div class="main">
+
+  <div class="intro-card">
+    <div class="intro-stats">
+      <div class="stat-big">7</div>
+      <div class="stat-label">consent journeys</div>
+    </div>
+    <div class="intro-text">
+      <p>This diagnostic assesses your credit union's maturity across the seven consent journeys that matter most as <strong>Consumer-Driven Banking (CDB), RTR, and CPPA</strong> converge. Each question covers a distinct regulatory obligation. Results identify your priority gaps and recommended next steps. Scores are for internal positioning use.</p>
+    </div>
+  </div>
+
+  <!-- SECTION A -->
+  <div class="section-head">
+    <div class="section-letter">A</div>
+    <div class="section-title">Foundational consent</div>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="q-card" id="card-q1">
+    <div class="q-header">
+      <div class="q-num-row">
+        <span class="q-num">Question 01</span>
+        <span class="q-reg">PIPEDA / CASL</span>
+      </div>
+      <div class="q-text">How does your credit union capture member data consent at account opening?</div>
+      <div class="q-context">Covers PIPEDA-required consent for collection, use and disclosure, plus CASL marketing opt-in.</div>
+    </div>
+    <div class="q-options">
+      <label class="opt-label"><input type="radio" name="q1" value="1" onchange="pick('q1',1)"> Paper or PDF form — member signs, CU files it<span class="opt-score">1/4</span></label>
+      <label class="opt-label"><input type="radio" name="q1" value="2" onchange="pick('q1',2)"> Digital form with checkboxes, but preferences are not fed into any system<span class="opt-score">2/4</span></label>
+      <label class="opt-label"><input type="radio" name="q1" value="3" onchange="pick('q1',3)"> Digital capture with CRM sync — preferences visible to advisors<span class="opt-score">3/4</span></label>
+      <label class="opt-label"><input type="radio" name="q1" value="4" onchange="pick('q1',4)"> Digital capture, CRM-synced, member can view and update self-serve<span class="opt-score">4/4</span></label>
+    </div>
+  </div>
+
+  <div class="q-card" id="card-q2">
+    <div class="q-header">
+      <div class="q-num-row">
+        <span class="q-num">Question 02</span>
+        <span class="q-reg">CASL s.6–8 · PIPEDA s.4.3</span>
+      </div>
+      <div class="q-text">How do you manage member communications preferences — channel, frequency and topic?</div>
+      <div class="q-context">Covers CASL compliance and the meaningful consent standard under PIPEDA s.4.3.</div>
+    </div>
+    <div class="q-options">
+      <label class="opt-label"><input type="radio" name="q2" value="1" onchange="pick('q2',1)"> Single email unsubscribe link — no channel or topic granularity<span class="opt-score">1/4</span></label>
+      <label class="opt-label"><input type="radio" name="q2" value="2" onchange="pick('q2',2)"> Basic opt-out categories but no positive preference capture<span class="opt-score">2/4</span></label>
+      <label class="opt-label"><input type="radio" name="q2" value="3" onchange="pick('q2',3)"> Preference centre exists covering channel and topic, but not SMS or WhatsApp<span class="opt-score">3/4</span></label>
+      <label class="opt-label"><input type="radio" name="q2" value="4" onchange="pick('q2',4)"> Full preference lifecycle: capture, update, and honour across all channels including SMS and WhatsApp<span class="opt-score">4/4</span></label>
+    </div>
+  </div>
+
+  <!-- SECTION B -->
+  <div class="section-head">
+    <div class="section-letter">B</div>
+    <div class="section-title">Payments &amp; data sharing</div>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="q-card" id="card-q3">
+    <div class="q-header">
+      <div class="q-num-row">
+        <span class="q-num">Question 03</span>
+        <span class="q-reg">PIPEDA meaningful consent · CPPA</span>
+      </div>
+      <div class="q-text">When a fintech partner accesses member data, what consent process exists?</div>
+      <div class="q-context">Purpose-specific consent — distinct from membership consent — is required for each partner integration under PIPEDA's meaningful consent standard.</div>
+    </div>
+    <div class="q-options">
+      <label class="opt-label"><input type="radio" name="q3" value="1" onchange="pick('q3',1)"> Covered in membership T&amp;Cs — no separate consent moment per partner<span class="opt-score">1/4</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="2" onchange="pick('q3',2)"> Partner-specific consent screen exists but data scope and retention are not disclosed<span class="opt-score">2/4</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="3" onchange="pick('q3',3)"> Consent screen with data scope and purpose; no active revocation mechanism for members<span class="opt-score">3/4</span></label>
+      <label class="opt-label"><input type="radio" name="q3" value="4" onchange="pick('q3',4)"> Granular consent: named partner, scope, purpose, expiry, and one-click revocation<span class="opt-score">4/4</span></label>
+    </div>
+  </div>
+
+  <div class="q-card" id="card-q4">
+    <div class="q-header">
+      <div class="q-num-row">
+        <span class="q-num">Question 04</span>
+        <span class="q-reg">RPAA / CDB framework · FCAC</span>
+      </div>
+      <div class="q-text">What is your current Consumer-Driven Banking (CDB) and RPAA consent readiness?</div>
+      <div class="q-context">CDB will require accredited third-party authorization with scope, duration and revocation — replacing screen-scraping arrangements where consent accountability is currently ambiguous.</div>
+    </div>
+    <div class="q-options">
+      <label class="opt-label"><input type="radio" name="q4" value="1" onchange="pick('q4',1)"> No defined strategy — currently relying on screen-scraping intermediaries<span class="opt-score">1/4</span></label>
+      <label class="opt-label"><input type="radio" name="q4" value="2" onchange="pick('q4',2)"> Strategy in development but no consent UI designed or resourced yet<span class="opt-score">2/4</span></label>
+      <label class="opt-label"><input type="radio" name="q4" value="3" onchange="pick('q4',3)"> CDB consent UI designed; awaiting RPAA accreditation framework to finalize build<span class="opt-score">3/4</span></label>
+      <label class="opt-label"><input type="radio" name="q4" value="4" onchange="pick('q4',4)"> CDB consent layer live or in UAT — includes revocation dashboard and audit trail<span class="opt-score">4/4</span></label>
+    </div>
+  </div>
+
+  <div class="q-card" id="card-q5">
+    <div class="q-header">
+      <div class="q-num-row">
+        <span class="q-num">Question 05</span>
+        <span class="q-reg">Payments Canada RTR · ISO 20022</span>
+      </div>
+      <div class="q-text">For Real-Time Rail (RTR), how prepared are you for request-to-pay consent and mandate management?</div>
+      <div class="q-context">Covers Confirmation of Payee (CoP) and pull-payment authorization under the Payments Canada RTR Participation Guide.</div>
+    </div>
+    <div class="q-options">
+      <label class="opt-label"><input type="radio" name="q5" value="1" onchange="pick('q5',1)"> RTR participation not yet planned; no mandate consent design underway<span class="opt-score">1/4</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="2" onchange="pick('q5',2)"> RTR participation planned; CoP addressed but request-to-pay mandates undefined<span class="opt-score">2/4</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="3" onchange="pick('q5',3)"> RTR consent framework designed — mandate scope, limits, amendment and revocation flows specified<span class="opt-score">3/4</span></label>
+      <label class="opt-label"><input type="radio" name="q5" value="4" onchange="pick('q5',4)"> RTR mandate management live — member can view, amend, and revoke mandates in digital banking<span class="opt-score">4/4</span></label>
+    </div>
+  </div>
+
+  <!-- SECTION C -->
+  <div class="section-head">
+    <div class="section-letter">C</div>
+    <div class="section-title">Emerging obligations</div>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="q-card" id="card-q6">
+    <div class="q-header">
+      <div class="q-num-row">
+        <span class="q-num">Question 06</span>
+        <span class="q-reg">PIPEDA s.4.3 · CPPA Bill C-27</span>
+      </div>
+      <div class="q-text">When advisor interactions are recorded in your CRM and used to trigger member outreach, what consent basis applies?</div>
+      <div class="q-context">Advisor-captured data used for marketing triggers requires a disclosed consent basis under PIPEDA — treating it as purely internal does not satisfy the obligation.</div>
+    </div>
+    <div class="q-options">
+      <label class="opt-label"><input type="radio" name="q6" value="1" onchange="pick('q6',1)"> Advisor notes are treated as internal records — no member consent basis defined<span class="opt-score">1/4</span></label>
+      <label class="opt-label"><input type="radio" name="q6" value="2" onchange="pick('q6',2)"> Acknowledged as a gap; under legal review but consent basis not yet resolved<span class="opt-score">2/4</span></label>
+      <label class="opt-label"><input type="radio" name="q6" value="3" onchange="pick('q6',3)"> Consent basis documented in privacy policy; members informed at onboarding<span class="opt-score">3/4</span></label>
+      <label class="opt-label"><input type="radio" name="q6" value="4" onchange="pick('q6',4)"> Explicit consent for CRM use and outreach triggers; member can opt out by data type<span class="opt-score">4/4</span></label>
+    </div>
+  </div>
+
+  <div class="q-card" id="card-q7">
+    <div class="q-header">
+      <div class="q-num-row">
+        <span class="q-num">Question 07</span>
+        <span class="q-reg">CPPA Bill C-27 · AIDA (proposed)</span>
+      </div>
+      <div class="q-text">If your credit union uses or plans to use AI for product recommendations or financial coaching, what consent framework exists?</div>
+      <div class="q-context">Automated decision-making and behavioral profiling require explicit consent under CPPA and PIPEDA's meaningful consent standard. Deploying before the framework is defined creates compounding exposure.</div>
+    </div>
+    <div class="q-options">
+      <label class="opt-label"><input type="radio" name="q7" value="1" onchange="pick('q7',1)"> No AI use yet and not on the roadmap — not applicable at this time<span class="opt-score">1/4</span></label>
+      <label class="opt-label"><input type="radio" name="q7" value="2" onchange="pick('q7',2)"> AI is on the roadmap but a consent framework has not been considered yet<span class="opt-score">2/4</span></label>
+      <label class="opt-label"><input type="radio" name="q7" value="3" onchange="pick('q7',3)"> AI consent framework in design — profiling and automated decisions to be disclosed<span class="opt-score">3/4</span></label>
+      <label class="opt-label"><input type="radio" name="q7" value="4" onchange="pick('q7',4)"> AI profiling consent is live — members can view what is modeled and opt out by use case<span class="opt-score">4/4</span></label>
+    </div>
+  </div>
+
+  <div class="submit-row">
+    <button class="btn-primary" id="score-btn" onclick="showResults()" disabled>Score my readiness</button>
+    <span class="submit-note" id="submit-note">Answer all 7 questions to generate results</span>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="result-section">
+
+    <div class="result-header" id="result-header">
+      <div class="result-tier" id="result-tier"></div>
+      <div class="result-score-row">
+        <span class="score-fraction" id="score-fraction"></span>
+        <div class="score-bar-track"><div class="score-bar-fill" id="score-bar-fill"></div></div>
+        <span class="score-pct" id="score-pct"></span>
+      </div>
+      <div class="result-summary" id="result-summary"></div>
+    </div>
+
+    <div class="domain-grid">
+      <div class="domain-card">
+        <div class="domain-label">A — Foundational consent</div>
+        <div class="domain-score" id="dom-a-score">—</div>
+        <div class="domain-bar-track"><div class="domain-bar-fill" id="dom-a-bar" style="width:0%;background:var(--green)"></div></div>
+      </div>
+      <div class="domain-card">
+        <div class="domain-label">B — Payments &amp; data sharing</div>
+        <div class="domain-score" id="dom-b-score">—</div>
+        <div class="domain-bar-track"><div class="domain-bar-fill" id="dom-b-bar" style="width:0%;background:var(--amber)"></div></div>
+      </div>
+      <div class="domain-card">
+        <div class="domain-label">C — Emerging obligations</div>
+        <div class="domain-score" id="dom-c-score">—</div>
+        <div class="domain-bar-track"><div class="domain-bar-fill" id="dom-c-bar" style="width:0%;background:var(--red)"></div></div>
+      </div>
+    </div>
+
+    <div class="gaps-section" id="gaps-section">
+      <div class="gaps-header">Priority gaps — where to focus first</div>
+      <div id="gaps-body"></div>
+    </div>
+
+    <div class="next-steps" id="next-steps-panel">
+      <h3>Recommended next steps</h3>
+      <div class="next-grid" id="next-grid"></div>
+    </div>
+
+    <div class="cta-row">
+      <button class="btn-outline" onclick="window.print()">Print results</button>
+      <button class="btn-outline" onclick="resetDiagnostic()">Retake diagnostic</button>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  <p>DecAid Consulting Inc. · decaidconsulting.com · iscott@decaidconsulting.com</p>
+  <p>For discussion purposes only. Regulatory guidance should be confirmed with qualified legal counsel.</p>
+</footer>
+
+<script>
+const answers = {};
+const TOTAL_Q = 7;
+
+const qMeta = {
+  q1: { label: 'Onboarding consent capture', section: 'A', reg: 'PIPEDA / CASL', advice: 'Move onboarding consent to a digital-first flow with CRM sync and member self-service access. Preferences captured at opening should be visible to every advisor and honoured across all channels.' },
+  q2: { label: 'Communications preference management', section: 'A', reg: 'CASL / PIPEDA s.4.3', advice: 'Implement a preference centre covering channel (email, SMS, WhatsApp, push), frequency, and topic. CASL requires express consent for each channel — a single unsubscribe link is not sufficient.' },
+  q3: { label: 'Fintech partner data consent', section: 'B', reg: 'PIPEDA meaningful consent', advice: 'Build a partner-specific consent screen for each fintech integration with named partner, data scope, purpose, retention period, and one-click revocation. Burying this in T&Cs does not meet meaningful consent.' },
+  q4: { label: 'CDB / RPAA authorization', section: 'B', reg: 'RPAA / FCAC', advice: 'Prioritize CDB consent UI design now. RPAA accreditation timelines are tightening and design decisions made before the framework finalizes are easier to adjust than post-deadline remediation.' },
+  q5: { label: 'RTR mandate consent', section: 'B', reg: 'Payments Canada RTR', advice: 'Design RTR mandate management — scope, dollar limits, frequency, amendment and revocation — before RTR go-live. CoP alone does not satisfy request-to-pay consent requirements.' },
+  q6: { label: 'Advisor CRM data consent basis', section: 'C', reg: 'PIPEDA s.4.3 / CPPA', advice: 'Commission a legal review to document the consent basis for advisor-to-CRM data flows. At minimum, disclose this use in your privacy policy; best practice is explicit consent with opt-out by data type.' },
+  q7: { label: 'AI personalization consent', section: 'C', reg: 'CPPA / AIDA', advice: 'Define your AI consent framework before deployment. Profiling and automated decision-making require explicit disclosure under CPPA. Retroactive consent for existing AI use is significantly harder to obtain.' }
+};
+
+function pick(qName, val) {
+  answers[qName] = val;
+  document.querySelectorAll(`[name=${qName}]`).forEach(r => {
+    r.closest('.opt-label').classList.toggle('selected', parseInt(r.value) === val);
+  });
+  const card = document.getElementById('card-' + qName);
+  if (card) card.classList.add('answered');
+  const count = Object.keys(answers).length;
+  document.getElementById('prog-fill').style.width = (count / TOTAL_Q * 100) + '%';
+  document.getElementById('prog-count').textContent = count + ' of ' + TOTAL_Q + ' answered';
+  const btn = document.getElementById('score-btn');
+  const note = document.getElementById('submit-note');
+  if (count === TOTAL_Q) {
+    btn.disabled = false;
+    note.textContent = 'All questions answered — ready to score';
+  } else {
+    btn.disabled = true;
+    note.textContent = (TOTAL_Q - count) + ' question' + (TOTAL_Q - count > 1 ? 's' : '') + ' remaining';
+  }
+}
+
+function showResults() {
+  const qs = ['q1','q2','q3','q4','q5','q6','q7'];
+  const total = qs.reduce((s, q) => s + (answers[q] || 0), 0);
+  const max = 28;
+  const pct = Math.round(total / max * 100);
+
+  const aScore = (answers.q1 || 0) + (answers.q2 || 0);
+  const bScore = (answers.q3 || 0) + (answers.q4 || 0) + (answers.q5 || 0);
+  const cScore = (answers.q6 || 0) + (answers.q7 || 0);
+
+  // Domain scores
+  document.getElementById('dom-a-score').textContent = aScore + '/8';
+  document.getElementById('dom-a-bar').style.width = (aScore / 8 * 100) + '%';
+  document.getElementById('dom-b-score').textContent = bScore + '/12';
+  document.getElementById('dom-b-bar').style.width = (bScore / 12 * 100) + '%';
+  document.getElementById('dom-c-score').textContent = cScore + '/8';
+  document.getElementById('dom-c-bar').style.width = (cScore / 8 * 100) + '%';
+
+  let tier, headerBg, headerColor, textColor, barColor, summary;
+  if (pct <= 35) {
+    tier = 'Consent exposure — foundational build required';
+    headerBg = '#FCEBEB'; headerColor = '#501313'; textColor = '#791F1F'; barColor = '#A32D2D';
+    summary = 'Your consent architecture has significant gaps across all three layers. You face compounding regulatory exposure as CPPA, Consumer-Driven Banking, and RTR converge. The priority is establishing foundational digital consent capture and a preference management infrastructure before the more complex CDB and RTR obligations arrive.';
+  } else if (pct <= 60) {
+    tier = 'Partial coverage — a structured program is needed';
+    headerBg = '#FAEEDA'; headerColor = '#633806'; textColor = '#854F0B'; barColor = '#BA7517';
+    summary = 'Table-stakes consent is in place but meaningful gaps remain in the data-sharing and emerging obligation layers. The risk window is the next 12–18 months before CDB accreditation and RTR mandate management become hard compliance requirements. A structured consent program now avoids emergency remediation later.';
+  } else if (pct <= 82) {
+    tier = 'Progressing — close the CDB and emerging gaps';
+    headerBg = '#E6F1FB'; headerColor = '#0C447C'; textColor = '#185FA5'; barColor = '#185FA5';
+    summary = 'Foundational and communications consent is reasonably mature. The priority gaps are in CDB authorization, RTR mandate management, and AI profiling consent — areas where design decisions made now determine your regulatory position through 2027 and beyond.';
+  } else {
+    tier = 'Consent-ready — competitive advantage available';
+    headerBg = '#E1F5EE'; headerColor = '#085041'; textColor = '#0F6E56'; barColor = '#0F6E56';
+    summary = 'Your consent architecture is ahead of the sector. The opportunity is to turn this into a visible member trust differentiator — member-facing consent dashboards, transparency reports, and proactive communications about your data governance position are credible competitive assets that no chartered bank will lead on.';
+  }
+
+  const header = document.getElementById('result-header');
+  header.style.background = headerBg;
+  header.style.border = '1px solid ' + barColor + '33';
+  header.style.borderRadius = '6px';
+  document.getElementById('result-tier').style.color = headerColor;
+  document.getElementById('result-tier').textContent = tier;
+  document.getElementById('score-fraction').style.color = textColor;
+  document.getElementById('score-fraction').textContent = 'Score: ' + total + ' / ' + max;
+  document.getElementById('score-bar-fill').style.background = barColor;
+  document.getElementById('score-bar-fill').style.width = pct + '%';
+  document.getElementById('score-pct').style.color = textColor;
+  document.getElementById('score-pct').textContent = pct + '%';
+  document.getElementById('result-summary').style.color = textColor;
+  document.getElementById('result-summary').textContent = summary;
+
+  // Gaps
+  const gaps = qs.filter(q => (answers[q] || 0) <= 2).map(q => qMeta[q]);
+  const gapsBody = document.getElementById('gaps-body');
+  if (gaps.length === 0) {
+    gapsBody.innerHTML = '<div style="padding:16px 20px;font-size:13px;color:var(--muted);">No critical gaps identified. Focus on continuous improvement and building member-facing transparency on your consent posture.</div>';
+  } else {
+    gapsBody.innerHTML = gaps.map(g => `
+      <div class="gap-row">
+        <div class="gap-area"><strong style="color:var(--forest);font-weight:normal">${g.label}</strong><br><span style="font-size:10px;color:var(--muted)">${g.reg}</span></div>
+        <div class="gap-action">${g.advice}</div>
+        <div class="gap-priority"><span class="priority-badge" style="background:var(--red-lt);color:var(--red)">Priority</span></div>
+      </div>`).join('');
+  }
+
+  // Next steps by tier
+  let steps;
+  if (pct <= 35) {
+    steps = [
+      { window: 'Days 1–30', action: 'Audit current consent touchpoints and map gaps against PIPEDA, CASL, and RPAA obligations' },
+      { window: 'Days 31–60', action: 'Design digital onboarding consent flow and preference centre with CRM integration spec' },
+      { window: 'Days 61–90', action: 'Brief board on CDB and RTR consent obligations; secure program budget and ownership' }
+    ];
+  } else if (pct <= 60) {
+    steps = [
+      { window: 'Days 1–30', action: 'Close foundational gaps: upgrade preference centre to full channel and topic management' },
+      { window: 'Days 31–60', action: 'Design CDB consent UI and fintech partner consent screens with revocation dashboard' },
+      { window: 'Days 61–90', action: 'Commission legal review of advisor CRM data flows and AI consent framework requirements' }
+    ];
+  } else if (pct <= 82) {
+    steps = [
+      { window: 'Days 1–30', action: 'Finalize CDB consent UI design and begin RPAA accreditation preparation' },
+      { window: 'Days 31–60', action: 'Complete RTR mandate management UX — scope, limits, amendment, and revocation flows' },
+      { window: 'Days 61–90', action: 'Define AI consent framework before any production AI deployment; document automated decision disclosure' }
+    ];
+  } else {
+    steps = [
+      { window: 'Near term', action: 'Launch member-facing consent transparency report — make your data governance posture visible' },
+      { window: 'Medium term', action: 'Benchmark consent architecture against incoming CPPA requirements and prepare for Bill C-27 compliance' },
+      { window: 'Ongoing', action: 'Use consent maturity as a member acquisition and retention differentiator in advisor conversations' }
+    ];
+  }
+
+  document.getElementById('next-grid').innerHTML = steps.map(s => `
+    <div class="next-card">
+      <div class="next-window">${s.window}</div>
+      <div class="next-action">${s.action}</div>
+    </div>`).join('');
+
+  const section = document.getElementById('result-section');
+  section.style.display = 'block';
+  setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function resetDiagnostic() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  document.querySelectorAll('.opt-label').forEach(l => l.classList.remove('selected'));
+  document.querySelectorAll('.q-card').forEach(c => c.classList.remove('answered'));
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-count').textContent = '0 of 7 answered';
+  document.getElementById('score-btn').disabled = true;
+  document.getElementById('submit-note').textContent = 'Answer all 7 questions to generate results';
+  document.getElementById('result-section').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Union Consent Journey Map — DecAid Consulting</title>
+<style>
+  :root {
+    --forest: #0A4231;
+    --canopy: #456D60;
+    --fern: #718D7F;
+    --sage: #A8B9B2;
+    --linen: #F4F1EC;
+    --stone: #D9D2C5;
+    --bark: #3D3930;
+    --slate: #5B86A0;
+    --deep-slate: #2D5470;
+    --dusty-rose: #C98B8B;
+    --rosewood: #8C3D3D;
+    --amber: #BA7517;
+    --amber-lt: #FAEEDA;
+    --red: #A32D2D;
+    --red-lt: #FCEBEB;
+    --blue: #185FA5;
+    --blue-lt: #E6F1FB;
+    --ink: #1A1A18;
+    --muted: #5A5A54;
+    --border: #C8C4BB;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--linen);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: var(--forest);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .header-left h1 {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    font-weight: normal;
+    color: #fff;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .header-left p {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--sage);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .decaid-mark {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--sage);
+    text-align: right;
+    line-height: 1.5;
+  }
+  .decaid-mark strong {
+    display: block;
+    color: #fff;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  /* Intro strip */
+  .intro {
+    background: var(--forest);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 0 40px 28px;
+  }
+  .intro p {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: var(--sage);
+    max-width: 740px;
+    line-height: 1.7;
+  }
+
+  /* Legend */
+  .legend-bar {
+    background: var(--bark);
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .legend-label {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--sage);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 8px;
+  }
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--stone);
+  }
+  .leg-dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* Main layout */
+  .main {
+    padding: 32px 40px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* Column headers */
+  .col-heads {
+    display: grid;
+    grid-template-columns: 220px 1fr 180px 130px;
+    gap: 0;
+    margin-bottom: 0;
+    border-bottom: 2px solid var(--forest);
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+  }
+  .col-head {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fern);
+    padding: 0 12px;
+  }
+  .col-head:first-child { padding-left: 0; }
+
+  /* Section grouping */
+  .section-label {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fern);
+    padding: 16px 0 6px;
+    border-bottom: 1px solid var(--stone);
+    margin-bottom: 0;
+  }
+
+  /* Journey rows */
+  .journey-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 180px 130px;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    align-items: start;
+    transition: background 0.15s;
+    cursor: default;
+  }
+  .journey-row:hover {
+    background: rgba(255,255,255,0.55);
+    border-radius: 4px;
+  }
+
+  .journey-name {
+    padding: 0 12px 0 0;
+  }
+  .journey-num {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    color: var(--fern);
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+  }
+  .journey-title {
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    color: var(--forest);
+    font-weight: normal;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .journey-sub {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .journey-scope {
+    padding: 0 16px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .scope-item {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 3px;
+  }
+  .scope-item::before {
+    content: '—';
+    color: var(--sage);
+    flex-shrink: 0;
+    font-size: 11px;
+    margin-top: 1px;
+  }
+
+  .journey-reg {
+    padding: 0 12px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .reg-tag {
+    display: inline-block;
+    background: rgba(10,66,49,0.08);
+    color: var(--forest);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+
+  .journey-maturity {
+    padding: 0 0 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+  .mat-badge {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: normal;
+    padding: 3px 10px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+  }
+  .mat-note {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* Maturity colors */
+  .m-stakes { background: #E1F5EE; color: #085041; }
+  .m-emerging { background: var(--blue-lt); color: var(--deep-slate); }
+  .m-gap { background: var(--amber-lt); color: #633806; }
+  .m-undef { background: var(--red-lt); color: #501313; }
+
+  /* Structural gap callout */
+  .gap-callout {
+    margin-top: 32px;
+    background: var(--forest);
+    border-radius: 6px;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .gap-callout h3 {
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    font-weight: normal;
+    color: #fff;
+    margin-bottom: 10px;
+    grid-column: 1 / -1;
+  }
+  .gap-col p {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--sage);
+    line-height: 1.7;
+  }
+  .gap-col strong {
+    color: #fff;
+    font-weight: normal;
+  }
+
+  /* Opportunity strip */
+  .opportunity {
+    margin-top: 20px;
+    border: 1px solid var(--stone);
+    border-radius: 6px;
+    padding: 18px 24px;
+    background: #fff;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    align-items: center;
+  }
+  .opp-label {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--canopy);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+  .opp-text {
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    color: var(--forest);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .opp-text em {
+    font-style: normal;
+    font-weight: normal;
+    color: var(--canopy);
+    text-decoration: underline;
+    text-decoration-color: var(--stone);
+  }
+
+  /* Footer */
+  footer {
+    background: var(--bark);
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer p {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--sage);
+  }
+
+  @media print {
+    body { background: #fff; }
+    .header { background: var(--forest) !important; -webkit-print-color-adjust: exact; }
+  }
+
+  @media (max-width: 780px) {
+    .header, .intro, .legend-bar, .main, footer { padding-left: 20px; padding-right: 20px; }
+    .col-heads, .journey-row { grid-template-columns: 1fr; }
+    .col-head { display: none; }
+    .journey-name, .journey-scope, .journey-reg, .journey-maturity { padding: 6px 0; }
+    .gap-callout { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Credit union consent journey map</h1>
+    <p>Seven consent moments · Canadian regulatory context · Member lifecycle view</p>
+  </div>
+  <div class="decaid-mark">
+    <strong>DecAid Consulting</strong>
+    decaidconsulting.com
+  </div>
+</div>
+
+<div class="intro">
+  <p>Consent in Canadian credit unions exists today as a series of disconnected moments — an onboarding form, a CASL checkbox, an OAuth screen — rather than a managed member lifecycle. As Consumer-Driven Banking (CDB), RTR, and CPPA converge, the gap between where most credit unions are and where they need to be is closing fast. This map identifies the seven distinct consent journeys, what each requires, and how mature the sector currently is at executing them.</p>
+</div>
+
+<div class="legend-bar">
+  <span class="legend-label">Maturity</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#0F6E56"></span>Table stakes</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#185FA5"></span>Emerging requirement</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#BA7517"></span>Critical gap</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#A32D2D"></span>Not yet defined</span>
+</div>
+
+<div class="main">
+
+  <div class="col-heads">
+    <div class="col-head">Consent moment</div>
+    <div class="col-head">What the member authorizes</div>
+    <div class="col-head">Regulatory driver</div>
+    <div class="col-head">CU maturity</div>
+  </div>
+
+  <!-- SECTION A -->
+  <div class="section-label">A — Foundational consent</div>
+
+  <div class="journey-row">
+    <div class="journey-name">
+      <div class="journey-num">01</div>
+      <div class="journey-title">Membership &amp; account opening</div>
+      <div class="journey-sub">The foundational consent moment at membership creation</div>
+    </div>
+    <div class="journey-scope">
+      <div class="scope-item">Data collection, use, and disclosure for membership purposes</div>
+      <div class="scope-item">Credit bureau authorization (Equifax / TransUnion pull)</div>
+      <div class="scope-item">Marketing communications opt-in by channel</div>
+      <div class="scope-item">Member preferences captured and retained on file</div>
+    </div>
+    <div class="journey-reg">
+      <span class="reg-tag">PIPEDA / CPPA</span><br>
+      <span class="reg-tag">CASL</span><br>
+      <span class="reg-tag">Credit reporting regs</span>
+    </div>
+    <div class="journey-maturity">
+      <span class="mat-badge m-stakes">Table stakes</span>
+      <span class="mat-note">Static form or PDF; preferences rarely CRM-synced</span>
+    </div>
+  </div>
+
+  <div class="journey-row">
+    <div class="journey-name">
+      <div class="journey-num">02</div>
+      <div class="journey-title">Communications preference management</div>
+      <div class="journey-sub">Ongoing channel, frequency and topic preference capture</div>
+    </div>
+    <div class="journey-scope">
+      <div class="scope-item">Channel preference: email, SMS, WhatsApp, push notification, branch</div>
+      <div class="scope-item">Frequency limits per channel and topic category</div>
+      <div class="scope-item">Topic consent: product offers, rate alerts, financial advice, service notices</div>
+      <div class="scope-item">Member-initiated updates and revocation at any time</div>
+    </div>
+    <div class="journey-reg">
+      <span class="reg-tag">CASL s.6–8</span><br>
+      <span class="reg-tag">PIPEDA s.4.3</span><br>
+      <span class="reg-tag">CRTC guidance</span>
+    </div>
+    <div class="journey-maturity">
+      <span class="mat-badge m-emerging">Emerging</span>
+      <span class="mat-note">Typically a single unsubscribe link — no channel or topic granularity</span>
+    </div>
+  </div>
+
+  <!-- SECTION B -->
+  <div class="section-label">B — Payments &amp; data sharing</div>
+
+  <div class="journey-row">
+    <div class="journey-name">
+      <div class="journey-num">03</div>
+      <div class="journey-title">Third-party fintech integration</div>
+      <div class="journey-sub">Purpose-specific consent when a fintech partner accesses member data</div>
+    </div>
+    <div class="journey-scope">
+      <div class="scope-item">Named partner identity and data categories to be accessed</div>
+      <div class="scope-item">Purpose disclosure: what the data will be used for</div>
+      <div class="scope-item">Retention period: how long the partner holds the data</div>
+      <div class="scope-item">Revocation rights: member can withdraw access</div>
+    </div>
+    <div class="journey-reg">
+      <span class="reg-tag">PIPEDA meaningful consent</span><br>
+      <span class="reg-tag">CPPA (Bill C-27)</span>
+    </div>
+    <div class="journey-maturity">
+      <span class="mat-badge m-emerging">Emerging</span>
+      <span class="mat-note">Buried in T&amp;Cs at onboarding — no separate consent moment</span>
+    </div>
+  </div>
+
+  <div class="journey-row">
+    <div class="journey-name">
+      <div class="journey-num">04</div>
+      <div class="journey-title">Consumer-Driven Banking (CDB) authorization</div>
+      <div class="journey-sub">RPAA-governed third-party data sharing with scope, duration and revocation</div>
+    </div>
+    <div class="journey-scope">
+      <div class="scope-item">Accredited third-party identity and purpose — explicit not implied</div>
+      <div class="scope-item">Data scope: account type, transaction history, balance, identity attributes</div>
+      <div class="scope-item">Duration: fixed expiry with renewal consent required</div>
+      <div class="scope-item">Revocation dashboard: one-click withdrawal of access for any authorized party</div>
+      <div class="scope-item">Audit trail: member-visible log of who accessed what and when</div>
+    </div>
+    <div class="journey-reg">
+      <span class="reg-tag">RPAA / CDB framework</span><br>
+      <span class="reg-tag">FCAC oversight</span><br>
+      <span class="reg-tag">PIPEDA s.4.3</span>
+    </div>
+    <div class="journey-maturity">
+      <span class="mat-badge m-gap">Critical gap</span>
+      <span class="mat-note">Most CUs have no defined CDB consent UI — screen-scraping fills the void</span>
+    </div>
+  </div>
+
+  <div class="journey-row">
+    <div class="journey-name">
+      <div class="journey-num">05</div>
+      <div class="journey-title">RTR mandate consent</div>
+      <div class="journey-sub">Real-Time Rail request-to-pay and recurring pull authorization</div>
+    </div>
+    <div class="journey-scope">
+      <div class="scope-item">Confirmation of Payee (CoP): member verifies payee before every send</div>
+      <div class="scope-item">Request-to-pay: member authorizes a payee-initiated pull against their account</div>
+      <div class="scope-item">Recurring mandate: scope, dollar limits, frequency, and start/end date</div>
+      <div class="scope-item">Amendment and revocation: member can modify or cancel active mandates</div>
+    </div>
+    <div class="journey-reg">
+      <span class="reg-tag">Payments Canada RTR</span><br>
+      <span class="reg-tag">RTR Participation Guide</span><br>
+      <span class="reg-tag">ISO 20022</span>
+    </div>
+    <div class="journey-maturity">
+      <span class="mat-badge m-gap">Critical gap</span>
+      <span class="mat-note">CoP exists; request-to-pay mandate consent not yet designed at most CUs</span>
+    </div>
+  </div>
+
+  <!-- SECTION C -->
+  <div class="section-label">C — Emerging obligations</div>
+
+  <div class="journey-row">
+    <div class="journey-name">
+      <div class="journey-num">06</div>
+      <div class="journey-title">Advisor &amp; branch CRM data use</div>
+      <div class="journey-sub">Consent basis when advisor interactions flow into CRM or trigger outreach</div>
+    </div>
+    <div class="journey-scope">
+      <div class="scope-item">Disclosed consent basis for recording advisor interaction data</div>
+      <div class="scope-item">CRM use: member informed that notes may trigger outreach</div>
+      <div class="scope-item">Outreach trigger permission by category (rate alert, product fit, review)</div>
+      <div class="scope-item">Member opt-out by data type, not only by channel</div>
+    </div>
+    <div class="journey-reg">
+      <span class="reg-tag">PIPEDA s.4.3</span><br>
+      <span class="reg-tag">CPPA (Bill C-27)</span>
+    </div>
+    <div class="journey-maturity">
+      <span class="mat-badge m-undef">Not defined</span>
+      <span class="mat-note">Advisor notes treated as internal records — consent basis undocumented</span>
+    </div>
+  </div>
+
+  <div class="journey-row" style="border-bottom: none;">
+    <div class="journey-name">
+      <div class="journey-num">07</div>
+      <div class="journey-title">AI personalization &amp; behavioral profiling</div>
+      <div class="journey-sub">Consent for behavioral data use in ML-driven recommendations</div>
+    </div>
+    <div class="journey-scope">
+      <div class="scope-item">Behavioral profiling consent: what data categories are modeled</div>
+      <div class="scope-item">Model training disclosure: member data used to improve AI systems</div>
+      <div class="scope-item">Automated decision disclosure: when AI shapes a product offer or advice</div>
+      <div class="scope-item">Opt-out right by use case — model training vs. real-time decisioning</div>
+    </div>
+    <div class="journey-reg">
+      <span class="reg-tag">CPPA (Bill C-27)</span><br>
+      <span class="reg-tag">PIPEDA meaningful consent</span><br>
+      <span class="reg-tag">AIDA (proposed)</span>
+    </div>
+    <div class="journey-maturity">
+      <span class="mat-badge m-undef">Not defined</span>
+      <span class="mat-note">Not on most CUs' consent roadmap — risk accumulating silently</span>
+    </div>
+  </div>
+
+  <!-- Structural gap -->
+  <div class="gap-callout">
+    <h3>The structural gap: seven journeys, zero lifecycle</h3>
+    <div class="gap-col">
+      <p>The problem is not that any one of these journeys is missing — it is that they are <strong>not connected</strong>. Preferences captured at onboarding are not surfaced to advisors. CASL opt-outs do not flow to the CRM. Fintech consent screens are not linked to a member-accessible revocation dashboard. Each journey is an island.</p>
+    </div>
+    <div class="gap-col">
+      <p>Credit unions that build a <strong>unified consent lifecycle</strong> — preference capture → CRM sync → CDB authorization layer → RTR mandate management — arrive at RPAA and RTR compliance with infrastructure already in place, not scrambling to bolt on compliance features after the regulatory deadline passes.</p>
+    </div>
+  </div>
+
+  <!-- Opportunity -->
+  <div class="opportunity">
+    <div class="opp-label">Positioning</div>
+    <div class="opp-text">
+      A credit union that builds a member-facing consent dashboard — one place to view, update, and revoke all authorizations — turns a compliance obligation into a <em>visible expression of cooperative values</em>. No chartered bank will lead here. The credit union that does becomes the most trusted financial institution in the member's life, not by assertion, but by architecture.
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>DecAid Consulting Inc. · decaidconsulting.com · iscott@decaidconsulting.com</p>
+  <p>For discussion purposes. Regulatory guidance should be confirmed with qualified legal counsel.</p>
+</footer>
+
+</body>
+</html>
