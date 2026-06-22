@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DecAid Tools — Credit Union Strategy &amp; Readiness</title>
+<style>
+  :root {
+    --forest: #0A4231;
+    --canopy: #456D60;
+    --fern: #718D7F;
+    --sage: #A8B9B2;
+    --linen: #F4F1EC;
+    --stone: #D9D2C5;
+    --bark: #3D3930;
+    --slate: #5B86A0;
+    --deep-slate: #2D5470;
+    --ink: #1A1A18;
+    --muted: #5A5A54;
+    --border: #C8C4BB;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: var(--linen);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .header {
+    background: var(--forest);
+    padding: 36px 48px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+  }
+  .header-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .brand-name {
+    font-family: 'Georgia', serif;
+    font-size: 28px;
+    font-weight: normal;
+    color: #fff;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .brand-name span {
+    color: var(--sage);
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 6px;
+    font-weight: normal;
+  }
+  .header-contact {
+    text-align: right;
+    font-size: 12px;
+    color: var(--sage);
+    line-height: 1.8;
+  }
+  .header-contact a {
+    color: var(--sage);
+    text-decoration: none;
+  }
+  .header-contact a:hover { color: #fff; }
+
+  /* Hero strip */
+  .hero {
+    background: var(--bark);
+    padding: 28px 48px;
+    border-bottom: 3px solid var(--canopy);
+  }
+  .hero-inner {
+    max-width: 860px;
+  }
+  .hero h1 {
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    font-weight: normal;
+    color: #fff;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .hero p {
+    font-size: 13px;
+    color: var(--sage);
+    line-height: 1.7;
+    max-width: 680px;
+  }
+
+  /* Main */
+  main {
+    flex: 1;
+    padding: 40px 48px 60px;
+    max-width: 1060px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--fern);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--stone);
+  }
+
+  /* Tool grid */
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  /* Tool card */
+  .tool-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .tool-card:hover {
+    border-color: var(--canopy);
+    box-shadow: 0 2px 12px rgba(10,66,49,0.08);
+  }
+  .tool-card-accent {
+    height: 4px;
+    background: var(--forest);
+    flex-shrink: 0;
+  }
+  .tool-card-accent.slate { background: var(--slate); }
+  .tool-card-accent.canopy { background: var(--canopy); }
+  .tool-card-accent.bark { background: var(--bark); }
+  .tool-card-accent.fern { background: var(--fern); }
+
+  .tool-card-body {
+    padding: 22px 24px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .tool-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--fern);
+    margin-bottom: 8px;
+  }
+  .tool-title {
+    font-family: 'Georgia', serif;
+    font-size: 17px;
+    font-weight: normal;
+    color: var(--forest);
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .tool-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    flex: 1;
+    margin-bottom: 18px;
+  }
+
+  .tool-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--stone);
+    padding-top: 14px;
+    gap: 12px;
+  }
+  .tool-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 3px;
+    background: var(--linen);
+    color: var(--muted);
+    border: 1px solid var(--stone);
+    white-space: nowrap;
+  }
+  .tool-cta {
+    font-size: 12px;
+    color: var(--canopy);
+    white-space: nowrap;
+    font-weight: normal;
+    flex-shrink: 0;
+  }
+  .tool-card:hover .tool-cta {
+    color: var(--forest);
+  }
+
+  /* Coming soon card */
+  .tool-card.coming-soon {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .coming-badge {
+    font-size: 10px;
+    background: var(--linen);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    border-radius: 3px;
+  }
+
+  /* About section */
+  .about-strip {
+    background: var(--forest);
+    border-radius: 6px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .about-col h3 {
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    font-weight: normal;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .about-col p {
+    font-size: 12px;
+    color: var(--sage);
+    line-height: 1.7;
+  }
+  .about-col a {
+    color: var(--fern);
+    text-decoration: none;
+  }
+  .about-col a:hover { color: #fff; }
+
+  /* Footer */
+  footer {
+    background: var(--bark);
+    padding: 16px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+  }
+  footer p { font-size: 11px; color: var(--sage); }
+  footer a { color: var(--sage); text-decoration: none; }
+  footer a:hover { color: #fff; }
+
+  @media (max-width: 720px) {
+    .header, .hero, main, footer { padding-left: 20px; padding-right: 20px; }
+    .tool-grid { grid-template-columns: 1fr; }
+    .about-strip { grid-template-columns: 1fr; gap: 20px; }
+    .header { flex-direction: column; align-items: flex-start; }
+    .header-contact { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">
+    <div class="brand-name">
+      DecAid
+      <span>Consulting Inc.</span>
+    </div>
+  </div>
+  <div class="header-contact">
+    <a href="https://decaidconsulting.com">decaidconsulting.com</a><br>
+    <a href="mailto:iscott@decaidconsulting.com">iscott@decaidconsulting.com</a><br>
+    Credit union strategy &amp; readiness
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>Tools for credit unions navigating payments modernization, member primacy, and fintech partnership.</h1>
+    <p>Each tool below is free to use and requires no login. Responses are not stored or shared. Built for credit union leaders, strategy teams, and their advisors.</p>
+  </div>
+</div>
+
+<main>
+
+  <div class="section-label">Live tools — open in any browser</div>
+
+  <div class="tool-grid">
+
+    <!-- RTR / CDB Diagnostic -->
+    <a class="tool-card" href="https://greatscottee.github.io/decaid-diagnostic/">
+      <div class="tool-card-accent slate"></div>
+      <div class="tool-card-body">
+        <div class="tool-tag">Readiness assessment</div>
+        <div class="tool-title">RTR &amp; Consumer-Driven Banking Readiness Diagnostic</div>
+        <div class="tool-desc">12-question self-assessment across four domains: RTR connectivity, CDB / Open Banking readiness, payments governance, and member data strategy. Produces a scored profile and tiered package recommendation. Takes under 8 minutes.</div>
+        <div class="tool-meta">
+          <div class="tool-pills">
+            <span class="pill">12 questions</span>
+            <span class="pill">RTR</span>
+            <span class="pill">CDB / RPAA</span>
+            <span class="pill">~8 min</span>
+          </div>
+          <span class="tool-cta">Open tool →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Decision Matrix -->
+    <a class="tool-card" href="https://greatscottee.github.io/decaid-diagnostic/decision-matrix.html">
+      <div class="tool-card-accent canopy"></div>
+      <div class="tool-card-body">
+        <div class="tool-tag">Strategic framework</div>
+        <div class="tool-title">Strategic Investment Decision Matrix</div>
+        <div class="tool-desc">Build vs. Buy / Protect vs. Share framework for credit union technology decisions. Maps capabilities across core infrastructure, payments, data, and member experience — with vendor context for key categories including Backbase, ebankIT, FiSPAN, and CustomerMinds.</div>
+        <div class="tool-meta">
+          <div class="tool-pills">
+            <span class="pill">Build vs. Buy</span>
+            <span class="pill">Vendor context</span>
+            <span class="pill">Member primacy</span>
+          </div>
+          <span class="tool-cta">Open tool →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Consent Journey Map -->
+    <a class="tool-card" href="https://greatscottee.github.io/decaid-diagnostic/cu_consent_journey_map.html">
+      <div class="tool-card-accent fern"></div>
+      <div class="tool-card-body">
+        <div class="tool-tag">Reference document</div>
+        <div class="tool-title">Credit Union Consent Journey Map</div>
+        <div class="tool-desc">Seven distinct consent journeys mapped across the member lifecycle — from onboarding and communications preference through to Consumer-Driven Banking authorization, RTR mandate consent, and AI personalization. Includes regulatory driver and current sector maturity for each.</div>
+        <div class="tool-meta">
+          <div class="tool-pills">
+            <span class="pill">7 journeys</span>
+            <span class="pill">PIPEDA / CASL</span>
+            <span class="pill">CDB / RTR</span>
+          </div>
+          <span class="tool-cta">Open tool →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Consent Diagnostic -->
+    <a class="tool-card" href="https://greatscottee.github.io/decaid-diagnostic/cu_consent_readiness_diagnostic.html">
+      <div class="tool-card-accent bark"></div>
+      <div class="tool-card-body">
+        <div class="tool-tag">Readiness assessment</div>
+        <div class="tool-title">Consent Readiness Diagnostic</div>
+        <div class="tool-desc">7-question self-assessment covering foundational consent, payments and data sharing authorization, and emerging obligations under CPPA and AIDA. Scores your credit union across three regulatory layers and identifies priority gaps with specific remediation guidance.</div>
+        <div class="tool-meta">
+          <div class="tool-pills">
+            <span class="pill">7 questions</span>
+            <span class="pill">CPPA / RPAA</span>
+            <span class="pill">~4 min</span>
+          </div>
+          <span class="tool-cta">Open tool →</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- About -->
+  <div class="about-strip">
+    <div class="about-col">
+      <h3>About DecAid Consulting</h3>
+      <p>DecAid is a Canadian credit union sector advisory firm focused on member primacy, competitive strategy, payments modernization, and fintech partnership readiness. We work with credit unions and fintech vendors across the CCUA and Central 1 ecosystems.</p>
+    </div>
+    <div class="about-col">
+      <h3>Working with DecAid</h3>
+      <p>These tools are starting points for a broader conversation. If your diagnostic results identify gaps worth exploring, or if you want to model the balance sheet impact of improved member primacy, reach out directly.<br><br>
+      <a href="mailto:iscott@decaidconsulting.com">iscott@decaidconsulting.com</a> &nbsp;·&nbsp;
+      <a href="https://linkedin.com/in/iainbscott">LinkedIn</a> &nbsp;·&nbsp;
+      <a href="https://decaidconsulting.com">decaidconsulting.com</a></p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© DecAid Consulting Inc. · Delta, BC · <a href="mailto:iscott@decaidconsulting.com">iscott@decaidconsulting.com</a></p>
+  <p>Tools are for discussion purposes. Regulatory guidance should be confirmed with qualified legal counsel.</p>
+</footer>
+
+</body>
+</html>
