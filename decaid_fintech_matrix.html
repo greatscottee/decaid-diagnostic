@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DecAid · Fintech Partnership Selection Tool</title>
+<style>
+:root {
+  --forest:#0A4231; --canopy:#456D60; --fern:#718D7F; --sage:#A8B9B2;
+  --linen:#F4F1EC; --stone:#D9D2C5; --bark:#3D3930; --slate:#5B86A0;
+  --amber:#C17A2A; --rosewood:#8C3D3D;
+  --white:#fff; --text:#2A2620; --mid:#5A5449;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Georgia,serif;background:var(--linen);color:var(--text);min-height:100vh;}
+
+/* NAV */
+.nav{background:var(--white);border-bottom:1px solid var(--stone);padding:14px 28px;display:flex;align-items:center;gap:20px;}
+.nav-brand{font-size:15px;font-weight:bold;color:var(--forest);margin-right:8px;}
+.nav-brand span{color:var(--canopy);}
+.tab-btn{padding:7px 18px;border-radius:20px;border:1.5px solid var(--stone);background:none;font-family:Georgia,serif;font-size:13px;color:var(--mid);cursor:pointer;transition:all .15s;}
+.tab-btn:hover{border-color:var(--canopy);color:var(--forest);}
+.tab-btn.active{background:var(--forest);border-color:var(--forest);color:var(--white);}
+.accent-bar{height:3px;background:linear-gradient(90deg,var(--canopy),var(--fern),var(--sage));}
+
+/* PANELS */
+.panel{display:none;padding:28px;}
+.panel.active{display:block;}
+.panel-title{font-size:18px;color:var(--forest);margin-bottom:6px;}
+.panel-sub{font-size:13px;color:var(--mid);font-style:italic;margin-bottom:24px;line-height:1.5;}
+
+/* TAB 1 — PRIORITIES */
+.priority-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.pri-row{display:grid;grid-template-columns:220px 1fr 80px 48px;align-items:center;gap:14px;background:var(--white);border:1px solid var(--stone);border-radius:7px;padding:12px 16px;}
+.pri-name{font-size:13px;font-weight:bold;color:var(--forest);}
+.pri-desc{font-size:12px;color:var(--mid);line-height:1.4;}
+.pri-pts{font-size:20px;font-weight:bold;color:var(--canopy);text-align:right;}
+.pri-pts span{font-size:11px;color:var(--fern);}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;background:var(--stone);border-radius:6px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--canopy);border:2px solid var(--white);box-shadow:0 1px 4px rgba(0,0,0,.18);cursor:pointer;}
+.budget-strip{background:var(--white);border:1px solid var(--stone);border-radius:7px;padding:14px 20px;display:flex;align-items:center;gap:20px;margin-bottom:20px;}
+.bnum{font-size:30px;font-weight:bold;color:var(--forest);line-height:1;}
+.btot{font-size:16px;color:var(--fern);}
+.blbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--mid);margin-top:1px;}
+.bbar-out{flex:1;height:8px;background:var(--stone);border-radius:8px;overflow:hidden;}
+.bbar-in{height:100%;border-radius:8px;background:var(--canopy);transition:width .2s,background .2s;}
+.brem{font-size:13px;color:var(--mid);flex-shrink:0;}
+.brem strong{color:var(--forest);}
+.btn-primary{background:var(--forest);color:var(--white);border:none;border-radius:6px;padding:12px 26px;font-family:Georgia,serif;font-size:14px;cursor:pointer;transition:background .15s;}
+.btn-primary:hover{background:var(--canopy);}
+.btn-secondary{background:none;border:1.5px solid var(--stone);color:var(--mid);border-radius:6px;padding:11px 18px;font-family:Georgia,serif;font-size:13px;cursor:pointer;}
+.btn-secondary:hover{border-color:var(--canopy);color:var(--forest);}
+.val-msg{font-size:12px;color:var(--rosewood);font-style:italic;}
+
+/* TAB 2 — USE CASES */
+.uc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+.uc-card{background:var(--white);border:1.5px solid var(--stone);border-radius:8px;padding:14px 16px;cursor:pointer;transition:border-color .15s;}
+.uc-card:hover{border-color:var(--canopy);}
+.uc-card.selected{border-color:var(--forest);background:#f0f5f2;}
+.uc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px;}
+.uc-name{font-size:13px;font-weight:bold;color:var(--forest);line-height:1.3;}
+.uc-pts{font-size:16px;font-weight:bold;color:var(--canopy);}
+.uc-pts span{font-size:10px;color:var(--fern);}
+.uc-desc{font-size:11.5px;color:var(--mid);line-height:1.45;}
+.uc-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--stone);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;transition:all .15s;}
+.uc-card.selected .uc-check{background:var(--forest);border-color:var(--forest);color:var(--white);}
+.uc-note{font-size:12px;color:var(--mid);font-style:italic;margin-bottom:16px;background:var(--white);border:1px solid var(--stone);border-left:3px solid var(--sage);border-radius:0 6px 6px 0;padding:10px 14px;}
+
+/* TAB 3 — FINTECH MATRIX */
+.matrix-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.matrix-note{font-size:12px;color:var(--mid);font-style:italic;margin-bottom:18px;}
+.filter-row{display:flex;align-items:center;gap:10px;}
+.filter-row label{font-size:12px;color:var(--mid);}
+.filter-row select{font-family:Georgia,serif;font-size:12px;padding:5px 8px;border:1px solid var(--stone);border-radius:4px;background:var(--white);color:var(--text);}
+.matrix-wrap{overflow-x:auto;}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:12px;}
+th,td{border:1px solid var(--stone);padding:0;}
+.th-fixed{width:150px;min-width:150px;padding:10px 12px;background:var(--linen);font-weight:bold;color:var(--forest);font-size:12px;vertical-align:middle;}
+.th-cat{width:130px;min-width:130px;padding:10px 12px;background:var(--linen);color:var(--mid);font-size:11px;vertical-align:middle;}
+.th-ca{width:40px;min-width:40px;padding:10px 6px;background:var(--linen);color:var(--mid);font-size:11px;text-align:center;vertical-align:middle;}
+.th-uc{padding:8px 10px;background:var(--linen);text-align:center;vertical-align:top;max-width:110px;min-width:90px;}
+.th-uc .uc-col-name{font-size:11px;color:var(--text);font-weight:bold;line-height:1.3;}
+.th-uc .uc-col-pts{font-size:11px;color:var(--canopy);font-weight:bold;margin-top:3px;}
+.th-uc.priority-col{background:#e8f0ec;}
+.td-fintech{padding:10px 12px;font-weight:bold;color:var(--forest);font-size:12.5px;vertical-align:middle;background:var(--white);}
+.td-cat{padding:10px 12px;color:var(--mid);font-size:11.5px;vertical-align:middle;background:var(--white);}
+.td-ca{text-align:center;vertical-align:middle;background:var(--white);padding:6px;}
+.ca-badge{display:inline-block;font-size:9px;font-weight:bold;background:#d4edda;color:#155724;border:1px solid #b8dacc;border-radius:3px;padding:2px 5px;letter-spacing:.05em;}
+.td-match{text-align:center;vertical-align:middle;padding:6px 8px;background:var(--white);}
+.td-match.priority-col{background:#f5faf7;}
+.match-pill{display:inline-block;font-size:10px;color:var(--forest);background:#d1e8dc;border:1px solid #a8d0b8;border-radius:12px;padding:3px 7px;line-height:1.3;text-align:center;}
+.match-pill.secondary{background:#fdf3e0;border-color:#f0d090;color:#7a5200;}
+.no-match{color:var(--stone);font-size:14px;}
+.row-hidden{display:none;}
+tr:hover td{background:#fafaf8 !important;}
+tr:hover .td-match.priority-col{background:#eff7f2 !important;}
+
+  /* ── TABS 4 & 5 ── */
+  .profile-select-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+  .profile-select-row label{font-size:12px;color:var(--mid);}
+  .profile-select-row select{font-family:Georgia,serif;font-size:13px;padding:7px 10px;border:1.5px solid var(--stone);border-radius:5px;background:var(--white);color:var(--text);}
+  .fin-section-title{font-size:11px;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);padding-bottom:8px;border-bottom:1.5px solid var(--stone);margin-bottom:14px;}
+  .fin-inputs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px;}
+  .fin-input-group label{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:4px;}
+  .fin-input-group input{width:100%;padding:7px 9px;border:1.5px solid var(--stone);border-radius:5px;font-family:Georgia,serif;font-size:13px;color:var(--text);background:var(--linen);outline:none;transition:border-color .15s;}
+  .fin-input-group input:focus{border-color:var(--canopy);}
+  .fin-input-group .hint{font-size:10px;color:var(--fern);margin-top:2px;}
+  .fin-input-group input.prefilled{border-color:var(--canopy);background:#edf4f0;}
+  .kpi-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+  .kpi-card{background:var(--white);border:1px solid var(--stone);border-radius:7px;padding:13px 15px;}
+  .kpi-lbl{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mid);margin-bottom:4px;}
+  .kpi-val{font-size:22px;font-weight:bold;color:var(--forest);line-height:1;}
+  .kpi-bench{font-size:10.5px;color:var(--mid);margin-top:3px;}
+  .kpi-stat{font-size:10px;font-weight:bold;margin-top:4px;}
+  .sok{color:#2d7a4f;} .swarn{color:var(--amber);} .salert{color:var(--rosewood);}
+  .insight-strip{display:flex;flex-direction:column;gap:7px;margin-bottom:20px;}
+  .insight-item{font-size:12.5px;color:var(--mid);line-height:1.55;padding-left:14px;position:relative;}
+  .insight-item::before{content:"→";color:var(--canopy);position:absolute;left:0;}
+  .insight-item strong{color:var(--forest);}
+  /* Business case */
+  .bc-section{background:var(--white);border:1px solid var(--stone);border-radius:8px;padding:18px 22px;margin-bottom:16px;}
+  .bc-section h3{font-size:12px;font-weight:bold;letter-spacing:.07em;text-transform:uppercase;color:var(--forest);padding-bottom:9px;border-bottom:1px solid var(--stone);margin-bottom:14px;}
+  .shortlist-row{display:flex;align-items:flex-start;gap:14px;padding:10px 0;border-bottom:1px solid var(--linen);}
+  .shortlist-row:last-child{border-bottom:none;}
+  .sl-rank{font-size:18px;font-weight:bold;color:var(--canopy);width:28px;flex-shrink:0;line-height:1;}
+  .sl-body{flex:1;}
+  .sl-name{font-size:14px;font-weight:bold;color:var(--forest);margin-bottom:2px;}
+  .sl-cat{font-size:11px;color:var(--mid);margin-bottom:4px;}
+  .sl-rationale{font-size:12px;color:var(--mid);line-height:1.5;}
+  .sl-badges{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;}
+  .sl-badge{font-size:10px;padding:2px 7px;border-radius:3px;font-weight:bold;}
+  .badge-ca{background:#d4edda;color:#155724;border:1px solid #b8dacc;}
+  .badge-pri{background:#d1e8dc;color:var(--forest);border:1px solid #a8d0b8;}
+  .roi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:6px;}
+  .roi-card{background:var(--linen);border-radius:6px;padding:11px 13px;}
+  .roi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--mid);margin-bottom:3px;}
+  .roi-val{font-size:17px;font-weight:bold;color:var(--forest);}
+  .roi-note{font-size:10.5px;color:var(--mid);margin-top:2px;font-style:italic;}
+  .risk-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--linen);font-size:12.5px;color:var(--mid);line-height:1.5;}
+  .risk-item:last-child{border-bottom:none;}
+  .risk-flag{font-size:13px;flex-shrink:0;}
+  .risk-item strong{color:var(--text);}
+  .bc-cta{background:var(--bark);color:var(--white);border-radius:8px;padding:20px 24px;margin-top:8px;}
+  .bc-cta-ey{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--sage);margin-bottom:8px;}
+  .bc-cta-hl{font-size:16px;color:var(--white);margin-bottom:8px;font-weight:normal;}
+  .bc-cta-hl strong{color:var(--sage);}
+  .bc-cta-bd{font-size:12px;color:#b0a89a;line-height:1.65;margin-bottom:12px;font-style:italic;}
+  .bc-cta-link{font-size:13px;color:var(--sage);text-decoration:none;border-bottom:1px solid var(--fern);padding-bottom:1px;}
+  .empty-state{text-align:center;padding:40px 20px;color:var(--mid);font-style:italic;font-size:13px;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="nav-brand"><span>Dec</span>Aid · Fintech Partnership Selection Tool</span>
+  <button class="tab-btn active" onclick="showTab(1,this)">1. Prioritise</button>
+  <button class="tab-btn" onclick="showTab(2,this)">2. Use cases</button>
+  <button class="tab-btn" onclick="showTab(3,this)">3. Fintechs</button>
+  <button class="tab-btn" onclick="showTab(4,this)">4. KPIs</button>
+  <button class="tab-btn" onclick="showTab(5,this)">5. Business Case</button>
+</div>
+<div class="accent-bar"></div>
+
+<!-- TAB 1: PRIORITISE -->
+<div class="panel active" id="tab1">
+  <div class="panel-title">What matters most to your credit union?</div>
+  <div class="panel-sub">Allocate 100 points across these strategic priorities. Distribute points to reflect the relative importance of each to your institution — more points means higher priority. Your allocation drives which use cases and fintechs surface in tabs 2 and 3.</div>
+
+  <div class="budget-strip">
+    <div><div style="display:flex;align-items:baseline;gap:5px"><span class="bnum" id="pts-used">0</span><span class="btot">/ 100</span></div><div class="blbl">points allocated</div></div>
+    <div class="bbar-out"><div class="bbar-in" id="bbar" style="width:0%"></div></div>
+    <div class="brem" id="brem"><strong>100</strong> remaining</div>
+  </div>
+
+  <div class="priority-grid" id="priority-grid"></div>
+
+  <div style="display:flex;gap:12px;align-items:center">
+    <button class="btn-primary" onclick="goToUseCases()">Next: Review use cases →</button>
+    <button class="btn-secondary" onclick="resetPriorities()">Reset</button>
+    <span class="val-msg" id="val-msg"></span>
+  </div>
+</div>
+
+<!-- TAB 2: USE CASES -->
+<div class="panel" id="tab2">
+  <div class="panel-title">Select your active use cases</div>
+  <div class="panel-sub">Based on your priorities, these are the use cases most relevant to your institution. Select all that apply — these drive the fintech matrix in tab 3. Use cases are pre-ranked by the points you allocated.</div>
+  <div class="uc-note" id="uc-note"></div>
+  <div class="uc-grid" id="uc-grid"></div>
+  <div style="display:flex;gap:12px;align-items:center">
+    <button class="btn-primary" onclick="goToMatrix()">Next: View fintech matrix →</button>
+    <button class="btn-secondary" onclick="showTab(1,null)">← Back</button>
+  </div>
+</div>
+
+<!-- TAB 3: FINTECH MATRIX -->
+<div class="panel" id="tab3">
+  <div class="matrix-header">
+    <div class="panel-title" style="margin-bottom:0">Fintech partnership matrix</div>
+    <div class="filter-row">
+      <label>Filter:</label>
+      <select id="filter-select" onchange="applyFilter()">
+        <option value="active">All active priorities</option>
+        <option value="all">Show all use cases</option>
+        <option value="top3">Top 3 priorities only</option>
+      </select>
+    </div>
+  </div>
+  <div class="matrix-note">Fintechs below address at least one use case within your active priorities. This is a starting list — not a recommendation or endorsement.</div>
+  <div class="matrix-wrap">
+    <table id="matrix-table"></table>
+  </div>
+  <div style="font-size:11px;color:var(--mid);font-style:italic;margin-top:10px">CA = Canadian-headquartered fintech. Green cells = primary use case fit. Amber cells = partial / adjacent fit.</div>
+
+  <div id="priority-summary" style="margin-top:24px;display:none">
+    <div style="font-size:11px;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);margin-bottom:12px">Priority summary</div>
+    <div id="summary-cards" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div style="margin-top:20px">
+      <button class="btn-secondary" onclick="showTab(2,null)">← Back to use cases</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PRIORITIES ──────────────────────────────────────────────
+const PRIORITIES = [
+  { id:'zillenial', name:'Attract & Retain Zillenials / New Canadians', desc:'Digital-first acquisition and engagement for younger demographics and newcomers who compare CUs directly to neobanks and big-bank apps.' },
+  { id:'deposits', name:'Increase Deposit Base', desc:'Attract and retain member deposits to fund loan growth and reduce reliance on wholesale funding. Account passporting and payroll switching are key levers.' },
+  { id:'loan', name:'Grow Loan Assets', desc:'Expand the loan portfolio through faster adjudication, alternative credit scoring, new credit products, and improved origination channels.' },
+  { id:'sme', name:'Better Serve SMEs', desc:'Deepen commercial relationships, improve business onboarding, treasury and cash management, and compete for SME operating accounts.' },
+  { id:'opeff', name:'Drive Operational Efficiencies', desc:'Reduce cost-to-serve, automate manual workflows, KYC/AML, and improve the efficiency ratio through straight-through processing.' },
+  { id:'revenue', name:'Diversify Revenue with Non-Interest Income', desc:'Develop fee-based products and services — insurance, wealth, payments, loyalty — that reduce dependence on NIM compression.' },
+];
+
+// ── USE CASES ───────────────────────────────────────────────
+const USE_CASES = [
+  { id:'zillenial', name:'Attract & Retain Zillenials / New Canadians', shortName:'Attract & Retain Zillenial…', priorities:['zillenial'], desc:'Early wage access, digital onboarding, PFM tools, credit building, loyalty and financial wellness features that resonate with younger members and newcomers.' },
+  { id:'deposits',  name:'Increase Deposit Base',                        shortName:'Increase Deposit Base',       priorities:['deposits'],  desc:'Account passporting, payroll switching, digital account opening and tools that make the CU the primary financial institution for members.' },
+  { id:'loan',      name:'Grow Loan Assets',                             shortName:'Grow Loan Assets',            priorities:['loan'],      desc:'AI-assisted adjudication, alternative credit scoring, BNPL, debt consolidation and broker channel access to expand the loan book.' },
+  { id:'sme',       name:'Better Serve SMEs',                            shortName:'Better Serve SMEs',           priorities:['sme'],       desc:'Digital business onboarding (KYB), cross-border payments, FX, accounting software integration, expense management and business payment cards.' },
+  { id:'opeff',     name:'Drive Operational Efficiencies',               shortName:'Drive Operational Efficien…', priorities:['opeff'],     desc:'KYC/AML automation, AI/ML credit adjudication, identity verification, workflow automation and straight-through processing to cut cost-to-serve.' },
+  { id:'revenue',   name:'Diversify Revenue with Non-Interest Income',   shortName:'Diversify Revenue with Non…', priorities:['revenue'],   desc:'Insurance, digital wealth, loyalty & rewards, referral platforms, commercial API monetization and system solution maximization.' },
+];
+
+// ── FINTECHS ────────────────────────────────────────────────
+// matches: { use_case_id: 'description of fit' }  primary=strong fit, secondary=partial
+const FINTECHS = [
+  { name:'Atomic Financial',   category:'Account Passporting',        ca:false, matches:{
+      zillenial:{type:'primary',  label:'Early wage access'},
+      deposits: {type:'primary',  label:'Account passporting & payroll switching'},
+      loan:     {type:'primary',  label:'Alternative credit adjudication'},
+      opeff:    {type:'primary',  label:'Remote payment & settlement automation'},
+  }},
+  { name:'Pinwheel',           category:'Account Passporting',        ca:false, matches:{
+      zillenial:{type:'primary',  label:'Early wage access'},
+      deposits: {type:'primary',  label:'Account passporting & payroll switching'},
+      loan:     {type:'primary',  label:'Alternative credit adjudication'},
+      opeff:    {type:'primary',  label:'Remote payment & settlement automation'},
+  }},
+  { name:'ThirdStream',        category:'Digital Onboarding',         ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Digital onboarding & KYC automation'},
+      deposits: {type:'primary',  label:'Digital account opening'},
+      sme:      {type:'primary',  label:'Digital business onboarding (KYB)'},
+      opeff:    {type:'primary',  label:'Digital KYC & identity verification'},
+  }},
+  { name:'Personetics',        category:'PFM / Analytics',            ca:false, matches:{
+      zillenial:{type:'primary',  label:'Budgeting & personal financial management'},
+      opeff:    {type:'primary',  label:'AI-driven member segmentation & analytics'},
+  }},
+  { name:'NestEgg',            category:'Adjudication',               ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Credit building & alternative adjudication'},
+      loan:     {type:'primary',  label:'Alternative credit adjudication'},
+      opeff:    {type:'primary',  label:'AI/ML for credit adjudication'},
+  }},
+  { name:'Parachute',          category:'Lending / Debt',             ca:true,  matches:{
+      zillenial:{type:'primary',  label:'BNPL & alternative lending'},
+      loan:     {type:'primary',  label:'Loan origination partnerships & broker channel +1'},
+  }},
+  { name:'AMLOK',              category:'SME Data & Credit',          ca:true,  matches:{
+      loan:     {type:'primary',  label:'Alternative credit adjudication +1'},
+      sme:      {type:'primary',  label:'Advanced adjudication & alternative data +1'},
+  }},
+  { name:'Judi.ai',            category:'SME Adjudication',           ca:true,  matches:{
+      loan:     {type:'primary',  label:'Alternative credit adjudication'},
+      sme:      {type:'primary',  label:'Advanced adjudication & alternative data'},
+      opeff:    {type:'primary',  label:'AI/ML for credit adjudication'},
+  }},
+  { name:'Loop Financial',     category:'SME Banking',                ca:true,  matches:{
+      sme:      {type:'primary',  label:'Cross-border payments & FX +2'},
+  }},
+  { name:'Intuit / FreshBooks',category:'SME Bookkeeping',            ca:false, matches:{
+      sme:      {type:'primary',  label:'Accounting software integration +2'},
+  }},
+  { name:'Cyder',              category:'Loyalty',                    ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Loyalty & rewards'},
+      revenue:  {type:'primary',  label:'Digital financial services referral'},
+  }},
+  { name:'Equifax',            category:'Credit Tools',               ca:false, matches:{
+      zillenial:{type:'primary',  label:'Credit building & alternative adjudication'},
+      loan:     {type:'primary',  label:'Alternative credit adjudication'},
+      opeff:    {type:'primary',  label:'AI/ML for credit adjudication'},
+  }},
+  { name:'Collabria',          category:'Payment Cards',              ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Loyalty & rewards'},
+      sme:      {type:'primary',  label:'Expense management & business payment cards'},
+      revenue:  {type:'primary',  label:'System solution maximization'},
+  }},
+  { name:'Aviso',              category:'Wealth Management',          ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Budgeting & personal financial management'},
+      revenue:  {type:'primary',  label:'System solution maximization'},
+  }},
+  { name:'CUMIS',              category:'Insurance',                  ca:true,  matches:{
+      revenue:  {type:'primary',  label:'System solution maximization'},
+  }},
+  { name:'Flinks',             category:'Open Banking / Data',        ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Digital onboarding & KYC automation'},
+      deposits: {type:'primary',  label:'Account passporting & payroll switching'},
+      loan:     {type:'primary',  label:'Alternative credit adjudication'},
+      revenue:  {type:'primary',  label:'Commercial API monetization'},
+  }},
+  { name:'Inverite',           category:'Open Banking / Verification',ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Digital onboarding & KYC automation'},
+      deposits: {type:'primary',  label:'Account passporting & payroll switching'},
+      loan:     {type:'primary',  label:'Alternative credit adjudication'},
+      opeff:    {type:'primary',  label:'Digital KYC & identity verification'},
+  }},
+  { name:'Marble Financial',   category:'Credit Building',            ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Credit building & alternative adjudication'},
+      loan:     {type:'primary',  label:'Debt consolidation tools'},
+  }},
+  { name:'Koho',               category:'Digital Banking / BNPL',     ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Digital onboarding & KYC automation +2'},
+      deposits: {type:'primary',  label:'Digital account opening'},
+  }},
+  { name:'Nest Wealth',        category:'Digital Wealth',             ca:true,  matches:{
+      revenue:  {type:'primary',  label:'Third-party product distribution +1'},
+  }},
+  { name:'League Data',        category:'CU Technology',              ca:true,  matches:{
+      opeff:    {type:'primary',  label:'Workflow automation & RPA +2'},
+  }},
+  { name:'Finastra',           category:'Core / Lending Platform',    ca:false, matches:{
+      loan:     {type:'primary',  label:'Digital mortgage origination +1'},
+      opeff:    {type:'primary',  label:'Workflow automation & RPA +1'},
+  }},
+  { name:'MX Technologies',    category:'PFM / Analytics',            ca:false, matches:{
+      zillenial:{type:'primary',  label:'Budgeting & personal financial management'},
+      opeff:    {type:'primary',  label:'AI-driven member segmentation & analytics'},
+  }},
+  { name:'Helcim',             category:'Payments / SME',             ca:true,  matches:{
+      sme:      {type:'primary',  label:'Cross-border payments & FX +1'},
+      revenue:  {type:'primary',  label:'Digital financial services referral'},
+  }},
+  { name:'Borrowell',          category:'Credit Building',            ca:true,  matches:{
+      zillenial:{type:'primary',  label:'Credit building & alternative adjudication'},
+      loan:     {type:'primary',  label:'Alternative credit adjudication +1'},
+  }},
+];
+
+// ── STATE ───────────────────────────────────────────────────
+const pState = {};
+PRIORITIES.forEach(p => { pState[p.id] = 0; });
+const selectedUCs = new Set();
+
+// ── TAB NAVIGATION ──────────────────────────────────────────
+function showTab(n, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab'+n).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else document.querySelectorAll('.tab-btn')[n-1].classList.add('active');
+  // Always rebuild matrix when tab 3 is shown
+  if (n === 3) {
+    // If no priorities set, default to equal weight so something shows
+    const total = Object.values(pState).reduce((a,b)=>a+b,0);
+    if (total === 0) {
+      PRIORITIES.forEach(p => { pState[p.id] = Math.floor(100/PRIORITIES.length); });
+    }
+    // If no use cases selected, select all
+    if (selectedUCs.size === 0) {
+      USE_CASES.forEach(uc => selectedUCs.add(uc.id));
+    }
+    buildMatrix();
+  }
+  // Rebuild use cases when tab 2 is shown
+  if (n === 2) buildUseCases();
+  // Rebuild BC when tab 5 shown directly
+  if (n === 5 && window._kpis && window._topPriorities) buildBusinessCase(window._kpis, window._topPriorities);
+  // Auto-load Meridian on first visit to tab 4
+  if (n === 4 && !window._profileLoaded) {
+    window._profileLoaded = true;
+    const sel = document.getElementById('cu-profile');
+    if (sel && !sel.value) {
+      sel.value = 'meridian';
+      loadProfile();
+    }
+  }
+}
+
+// ── TAB 1: BUILD PRIORITY SLIDERS ───────────────────────────
+function buildPriorityGrid() {
+  const g = document.getElementById('priority-grid');
+  g.innerHTML = '';
+  PRIORITIES.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'pri-row';
+    row.innerHTML = `
+      <div class="pri-name">${p.name}</div>
+      <div><input type="range" min="0" max="100" value="0" step="1" id="sl-${p.id}" oninput="updPriority('${p.id}',this.value)"></div>
+      <div class="pri-desc" style="display:none">${p.desc}</div>
+      <div class="pri-pts" id="pp-${p.id}">0<span>pts</span></div>
+    `;
+    // replace hidden desc with visible one below name
+    row.innerHTML = `
+      <div>
+        <div class="pri-name">${p.name}</div>
+        <div style="font-size:11px;color:var(--mid);margin-top:3px;line-height:1.4">${p.desc}</div>
+      </div>
+      <input type="range" min="0" max="100" value="0" step="1" id="sl-${p.id}" oninput="updPriority('${p.id}',this.value)">
+      <div class="pri-pts" id="pp-${p.id}">0<span>pts</span></div>
+      <div></div>
+    `;
+    g.appendChild(row);
+  });
+}
+
+function updPriority(id, val) {
+  val = parseInt(val);
+  pState[id] = val;
+  document.getElementById('pp-'+id).innerHTML = val+'<span>pts</span>';
+  const total = Object.values(pState).reduce((a,b)=>a+b,0);
+  const rem = 100-total;
+  document.getElementById('pts-used').textContent = total;
+  document.getElementById('bbar').style.width = Math.min(total,100)+'%';
+  const fill = document.getElementById('bbar');
+  const remEl = document.getElementById('brem');
+  if (total > 100) { fill.style.background='var(--rosewood)'; remEl.innerHTML='<strong style="color:var(--rosewood)">'+Math.abs(rem)+' over</strong>'; }
+  else if (total===100) { fill.style.background='var(--forest)'; remEl.innerHTML='<strong style="color:var(--forest)">✓ Ready</strong>'; }
+  else { fill.style.background='var(--canopy)'; remEl.innerHTML='<strong>'+rem+'</strong> remaining'; }
+}
+
+function resetPriorities() {
+  PRIORITIES.forEach(p => {
+    pState[p.id]=0;
+    const sl=document.getElementById('sl-'+p.id); if(sl) sl.value=0;
+    const pp=document.getElementById('pp-'+p.id); if(pp) pp.innerHTML='0<span>pts</span>';
+  });
+  document.getElementById('pts-used').textContent='0';
+  document.getElementById('bbar').style.width='0%';
+  document.getElementById('bbar').style.background='var(--canopy)';
+  document.getElementById('brem').innerHTML='<strong>100</strong> remaining';
+  document.getElementById('val-msg').textContent='';
+}
+
+function goToUseCases() {
+  const total = Object.values(pState).reduce((a,b)=>a+b,0);
+  if (total !== 100) {
+    document.getElementById('val-msg').textContent = total<100?`Allocate all 100 points first (${100-total} remaining).`:`You've used ${total} — remove ${total-100} before continuing.`;
+    return;
+  }
+  document.getElementById('val-msg').textContent='';
+  buildUseCases();
+  showTab(2, null);
+}
+
+// ── TAB 2: USE CASES ────────────────────────────────────────
+function buildUseCases() {
+  // Sort use cases by their priority pts
+  const sorted = USE_CASES.map(uc => {
+    const pts = uc.priorities.reduce((s,pid) => s + (pState[pid]||0), 0);
+    return {...uc, pts};
+  }).sort((a,b) => b.pts-a.pts);
+
+  // Top priorities description
+  const topP = PRIORITIES.filter(p=>pState[p.id]>0).sort((a,b)=>pState[b.id]-pState[a.id]).slice(0,3);
+  document.getElementById('uc-note').textContent = topP.length
+    ? 'Your top priorities: ' + topP.map(p=>`${p.name} (${pState[p.id]}pts)`).join(' · ') + '. Use cases are ranked by alignment to your priority allocation.'
+    : 'Select use cases that apply to your institution.';
+
+  const g = document.getElementById('uc-grid');
+  g.innerHTML = '';
+  sorted.forEach(uc => {
+    const card = document.createElement('div');
+    card.className = 'uc-card' + (selectedUCs.has(uc.id)?' selected':'');
+    card.id = 'uc-'+uc.id;
+    card.onclick = () => toggleUC(uc.id, card);
+    card.innerHTML = `
+      <div class="uc-top">
+        <div class="uc-name">${uc.name}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          ${uc.pts>0?`<div class="uc-pts">${uc.pts}<span>pts</span></div>`:''}
+          <div class="uc-check">${selectedUCs.has(uc.id)?'✓':''}</div>
+        </div>
+      </div>
+      <div class="uc-desc">${uc.desc}</div>
+    `;
+    g.appendChild(card);
+  });
+}
+
+function toggleUC(id, card) {
+  if (selectedUCs.has(id)) { selectedUCs.delete(id); card.classList.remove('selected'); card.querySelector('.uc-check').textContent=''; }
+  else { selectedUCs.add(id); card.classList.add('selected'); card.querySelector('.uc-check').textContent='✓'; }
+}
+
+function goToMatrix() {
+  if (selectedUCs.size === 0) {
+    // auto-select all with pts > 0
+    USE_CASES.forEach(uc => { if(uc.priorities.some(pid=>pState[pid]>0)) selectedUCs.add(uc.id); });
+  }
+  buildMatrix();
+  showTab(3, null);
+}
+
+// ── TAB 3: MATRIX ───────────────────────────────────────────
+function getActiveUCs(filter) {
+  let ucs = USE_CASES.map(uc => {
+    const pts = uc.priorities.reduce((s,pid)=>s+(pState[pid]||0),0);
+    return {...uc, pts};
+  }).sort((a,b)=>b.pts-a.pts);
+
+  if (filter==='active') {
+    const filtered = ucs.filter(uc=>selectedUCs.has(uc.id));
+    ucs = filtered.length > 0 ? filtered : ucs; // fallback: show all if nothing selected
+  } else if (filter==='top3') {
+    const filtered = ucs.filter(uc=>selectedUCs.has(uc.id)).slice(0,3);
+    ucs = filtered.length > 0 ? filtered : ucs.slice(0,3);
+  }
+  return ucs;
+}
+
+function buildMatrix() {
+  applyFilter();
+  buildSummary();
+}
+
+function buildSummary() {
+  const summaryEl = document.getElementById('priority-summary');
+  const cardsEl = document.getElementById('summary-cards');
+  if (!summaryEl) return;
+  summaryEl.style.display = 'block';
+  cardsEl.innerHTML = '';
+  const active = PRIORITIES.filter(p => pState[p.id] > 0).sort((a,b) => pState[b.id]-pState[a.id]);
+  active.forEach(p => {
+    const ucId = p.id;
+    const matchCount = FINTECHS.filter(ft => ft.matches[ucId]).length;
+    const pts = pState[p.id];
+    const level = pts >= 20 ? 'High' : pts >= 12 ? 'Medium' : 'Low';
+    const levelColor = pts >= 20 ? 'var(--forest)' : pts >= 12 ? 'var(--amber)' : 'var(--mid)';
+    const d = document.createElement('div');
+    d.style.cssText = 'display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--stone);border-radius:6px;padding:10px 16px;';
+    d.innerHTML = `
+      <div style="flex-shrink:0;text-align:right">
+        <div style="font-size:18px;font-weight:bold;color:var(--forest)">${pts} pts</div>
+        <div style="font-size:10px;font-weight:bold;color:${levelColor};letter-spacing:.06em;text-transform:uppercase">${level}</div>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:bold;color:var(--forest)">${p.name}</div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);flex-shrink:0">${matchCount} fintechs available</div>
+    `;
+    cardsEl.appendChild(d);
+  });
+}
+
+function applyFilter() {
+  const filter = document.getElementById('filter-select')?.value || 'active';
+  const activeUCs = getActiveUCs(filter);
+  const table = document.getElementById('matrix-table');
+  table.innerHTML = '';
+
+  // Header row 1
+  const hr = document.createElement('tr');
+  hr.innerHTML = `<th class="th-fixed">Fintech</th><th class="th-cat">Category</th><th class="th-ca">CA</th>`
+    + activeUCs.map(uc=>`<th class="th-uc ${selectedUCs.has(uc.id)?'priority-col':''}"><div class="uc-col-name">${uc.shortName}</div><div class="uc-col-pts">${uc.pts} pts</div></th>`).join('');
+  table.appendChild(hr);
+
+  // Filter fintechs to those with at least one match in active UCs
+  const visibleFintechs = FINTECHS.filter(ft => activeUCs.some(uc => ft.matches[uc.id]));
+
+  visibleFintechs.forEach(ft => {
+    const tr = document.createElement('tr');
+    let cells = `<td class="td-fintech">${ft.name}</td><td class="td-cat">${ft.category}</td><td class="td-ca">${ft.ca?'<span class="ca-badge">CA</span>':''}</td>`;
+    activeUCs.forEach(uc => {
+      const m = ft.matches[uc.id];
+      const isPri = selectedUCs.has(uc.id);
+      if (m) {
+        cells += `<td class="td-match${isPri?' priority-col':''}"><span class="match-pill${m.type==='secondary'?' secondary':''}">${m.label}</span></td>`;
+      } else {
+        cells += `<td class="td-match${isPri?' priority-col':''}"><span class="no-match">—</span></td>`;
+      }
+    });
+    tr.innerHTML = cells;
+    table.appendChild(tr);
+  });
+
+  if (visibleFintechs.length===0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="${activeUCs.length+3}" style="padding:20px;text-align:center;color:var(--mid);font-style:italic">No fintechs match your selected use cases. Go back to tab 2 and select use cases.</td>`;
+    table.appendChild(tr);
+  }
+}
+
+
+// ── CU PROFILES ──────────────────────────────────────────────
+const CU_PROFILES = {
+  meridian: {
+    name: 'Meridian Credit Union',
+    note: 'KPMG-audited FY2025 — fully loaded',
+    assets: 27313.9, deposits: 19450.4, nii: 494.6, netincome: 80.4,
+    opex: 419.2, revenue: 604.1, loans: 23735.6, members: 380000, loanyield: 4.95, loanincome: 1174.5,
+    nim_reported: 1.63, impaired_pct: 1.17, tier1: 11.9, supervisory_capital: 13.6,
+    leverage: 7.0, net_income_statutory: 14.7, deposit_cost: 2.91
+  },
+  vancity: {
+    name: 'Vancity',
+    note: 'Audited FY2025 — loan yield from Note 19',
+    assets: 31460, deposits: 26850, nii: 527.6, netincome: 69.9,
+    opex: null, revenue: null, loans: null, members: 560000, loanyield: 4.32, loanincome: null
+  }
+};
+
+function loadProfile() {
+  const val = document.getElementById('cu-profile').value;
+  const noteEl = document.getElementById('profile-note');
+  const fields = ['assets','deposits','nii','netincome','opex','revenue','loans','members','loanyield','loanincome'];
+  // Clear all fields first
+  fields.forEach(f => { const el=document.getElementById('f-'+f); if(el){el.value='';el.classList.remove('prefilled');} });
+  document.getElementById('kpi-output').style.display = 'none';
+  if (!val || val==='custom') { noteEl.textContent=''; return; }
+  const p = CU_PROFILES[val];
+  noteEl.textContent = p.note;
+  // Populate all matching fields
+  fields.forEach(f => {
+    const el = document.getElementById('f-'+f);
+    if (el && p[f] !== null && p[f] !== undefined) {
+      el.value = p[f];
+      el.classList.add('prefilled');
+    }
+  });
+  calcLoanYield();
+  // Auto-run KPI analysis immediately
+  buildKPIs();
+}
+
+function clearFinancials() {
+  document.getElementById('cu-profile').value='';
+  document.getElementById('profile-note').textContent='';
+  ['assets','deposits','nii','netincome','opex','revenue','loans','members','loanyield','loanincome'].forEach(f=>{const el=document.getElementById('f-'+f);if(el){el.value='';el.classList.remove('prefilled');}});
+  document.getElementById('kpi-output').style.display='none';
+}
+
+function fv(id) { const el=document.getElementById(id); return el&&el.value?parseFloat(el.value):null; }
+
+function calcLoanYield() {
+  const loans = fv('f-loans');
+  const loanincome = fv('f-loanincome');
+  const yieldEl = document.getElementById('f-loanyield');
+  const hintEl  = document.getElementById('loanyield-hint');
+  if (loans && loanincome && loans > 0) {
+    const calculated = (loanincome / loans * 100).toFixed(2);
+    yieldEl.value = calculated;
+    yieldEl.classList.add('prefilled');
+    if (hintEl) hintEl.textContent = 'Auto-calculated: $' + loanincome + 'M interest ÷ $' + loans + 'M loans = ' + calculated + '%';
+  } else if (!yieldEl.classList.contains('prefilled-manual')) {
+    yieldEl.value = '';
+    yieldEl.classList.remove('prefilled');
+    if (hintEl) hintEl.textContent = 'Calculated from interest income ÷ loans, or enter manually';
+  }
+}
+
+function buildKPIs() {
+  const profileVal = document.getElementById('cu-profile')?.value;
+  const profile = (profileVal && CU_PROFILES[profileVal]) ? CU_PROFILES[profileVal] : null;
+  const assets=fv('f-assets'),deposits=fv('f-deposits'),nii=fv('f-nii'),
+    netincome=fv('f-netincome'),opex=fv('f-opex'),revenue=fv('f-revenue'),
+    loans=fv('f-loans'),members=fv('f-members'),loanyield=fv('f-loanyield');
+  const kpis=[];
+  // Use institution-reported NIM if available (avg asset base), else calculate from inputs
+  if(nii&&assets){
+    const calcNIM = nii/assets*100;
+    const reportedNIM = profile?.nim_reported || null;
+    const v = reportedNIM || calcNIM;
+    const src = reportedNIM ? ' (institution-reported, avg asset base)' : '';
+    kpis.push({lbl:'Net Interest Margin',val:v.toFixed(2)+'%',bench:'CU avg: 2.0–2.4%',status:v>=2.0?'ok':v>=1.6?'warn':'alert',note:(v<2.0?'Below sector norm — NIM compression is the primary driver of urgency on both deposit-growth and loan-mix strategies':'Within healthy range')+src});
+  }
+  if(opex&&revenue){const v=opex/revenue*100;kpis.push({lbl:'Efficiency Ratio',val:v.toFixed(1)+'%',bench:'CU target: <75%',status:v<=72?'ok':v<=78?'warn':'alert',note:v>78?'Above target — fintech investments need a clear efficiency ROI case before board approval':'Near threshold — model opex impact of any new partnership carefully'});}
+  if(netincome&&assets){const v=netincome/assets*100;kpis.push({lbl:'Return on Assets',val:v.toFixed(3)+'%',bench:'CU avg: 0.4–0.6%',status:v>=0.4?'ok':v>=0.25?'warn':'alert',note:v<0.25?'Low ROA — any partnership must demonstrably improve earnings within 24 months':'Model the ROA impact of partnership costs against projected revenue lift'});}
+  if(deposits&&assets){const v=deposits/assets*100;kpis.push({lbl:'Deposit / Asset Ratio',val:v.toFixed(1)+'%',bench:'Higher = more member-funded',status:v>=75?'ok':v>=65?'warn':'alert',note:v<65?'Heavy non-member funding — deposit attraction is urgent; weight deposit-base fintechs heavily':'Strong member funding base — protect deposit stickiness in every fintech decision'});}
+  if(loans&&deposits){const v=loans/deposits*100;kpis.push({lbl:'Loan / Deposit Ratio',val:v.toFixed(1)+'%',bench:'CU typical: 80–95%',status:v<=95?'ok':v<=105?'warn':'alert',note:v>105?'Loans outpacing deposits — deposit-growth fintech partnerships are balance sheet critical':'Balanced — monitor as loan growth strategy accelerates'});}
+  if(revenue&&members){const v=revenue*1e6/members;kpis.push({lbl:'Revenue per Member',val:'$'+Math.round(v).toLocaleString(),bench:'Sector: $800–$1,800',status:v>=1000?'ok':v>=700?'warn':'alert',note:'Fintech partnerships that deepen product penetration lift this directly — the clearest measure of member primacy progress'});}
+  if(nii&&members){const v=nii*1e6/members;kpis.push({lbl:'NII per Member',val:'$'+Math.round(v).toLocaleString(),bench:'Indicator of relationship depth',status:v>=600?'ok':v>=400?'warn':'alert',note:'Primary balance sheet measure of how well the institution monetizes each member relationship'});}
+  if(loanyield){const v=parseFloat(loanyield);kpis.push({lbl:'Avg Loan Yield',val:v.toFixed(2)+'%',bench:'Post-cycle avg: ~4.0–4.6%',status:v>=4.0?'ok':v>=3.5?'warn':'alert',note:v<4.0?'Yield compression — SME and commercial fintech partnerships may improve loan mix':'Healthy yield — monitor as rate environment normalizes'});}
+  if(netincome&&members){const v=netincome*1e6/members;kpis.push({lbl:'Net Income per Member',val:'$'+Math.round(v).toLocaleString(),bench:'Cooperative profitability benchmark',status:v>=80?'ok':v>=40?'warn':'alert',note:'Low net income per member limits capacity to invest in technology without member cost or dividend impact'});}
+  // Deposit cost (from profile metadata or derived)
+  if(profile?.deposit_cost){const v=profile.deposit_cost;kpis.push({lbl:'Deposit Cost',val:v.toFixed(2)+'%',bench:'Lower = funding advantage',status:v<=2.5?'ok':v<=3.2?'warn':'alert',note:v>3.2?'High deposit cost squeezing NIM — deposit-mix shift toward demand deposits and payroll switching is a margin lever':'Deposit cost is manageable — monitor as rate environment shifts'});}
+  if(loanyield&&profile?.deposit_cost){const spread=loanyield-profile.deposit_cost;kpis.push({lbl:'Loan-Deposit Spread',val:spread.toFixed(2)+'%',bench:'Healthy spread: >2.0%',status:spread>=2.0?'ok':spread>=1.5?'warn':'alert',note:spread<2.0?'Spread compression is the core NIM story — either loan yield must rise or deposit cost must fall':'Spread supports NIM — protect by improving deposit mix and loan portfolio quality'});}
+  if(profile?.impaired_pct){const v=profile.impaired_pct;kpis.push({lbl:'Impaired Loans',val:v.toFixed(2)+'%',bench:'CU avg: 0.5–1.0%',status:v<=0.8?'ok':v<=1.2?'warn':'alert',note:v>1.2?'Elevated impaired loans — provision burden is suppressing ROA; adjudication fintech partnerships must demonstrate credit quality maintenance':'Elevated — watch ECL provision trend; adjudication technology should improve not just volume but quality'});}
+  if(profile?.tier1){const v=profile.tier1;kpis.push({lbl:'Tier 1 Capital Ratio',val:v.toFixed(1)+'%',bench:'FSRA minimum: 8.0%',status:v>=12?'ok':v>=9?'warn':'alert',note:'Capital adequacy provides capacity for fintech investment — but technology spend must be weighed against retained earnings pressure from low ROA'});}
+  if(kpis.length===0){alert('Please enter at least two financial figures to generate KPIs.');return;}
+
+  const grid=document.getElementById('kpi-cards');
+  grid.innerHTML='';
+  kpis.forEach(k=>{const sc=k.status==='ok'?'sok':k.status==='warn'?'swarn':'salert';const si=k.status==='ok'?'✓ On track':k.status==='warn'?'⚠ Watch':'✕ Needs attention';const d=document.createElement('div');d.className='kpi-card';d.innerHTML=`<div class="kpi-lbl">${k.lbl}</div><div class="kpi-val">${k.val}</div><div class="kpi-bench">${k.bench}</div><div class="kpi-stat ${sc}">${si}</div>`;grid.appendChild(d);});
+
+  const ins=document.getElementById('kpi-insights');
+  ins.innerHTML='';
+  const topP=PRIORITIES.filter(p=>pState[p.id]>0).sort((a,b)=>pState[b.id]-pState[a.id]);
+  kpis.filter(k=>k.status!=='ok').forEach(k=>{const d=document.createElement('div');d.className='insight-item';d.innerHTML=k.note;ins.appendChild(d);});
+  const priIns={
+    zillenial:'Your top priority targets members who benchmark your digital experience against neobanks daily. Revenue per member and NII per member are the metrics that move if you win this segment.',
+    deposits:'Account passporting and payroll switching fintechs create switching costs that directly improve deposit stickiness — model the NIM impact of a 5% deposit base increase at your current funding cost.',
+    loan:'Loan growth fintech partnerships should pass three tests: adjudication speed, portfolio yield impact, and loss rate vs. ECL provision increase.',
+    sme:'SME primacy delivers 4–6× the NII per relationship vs. retail. Commercial fintech partnerships should be sized to reflect that economics differential.',
+    opeff:'Every 1% improvement in efficiency ratio at your asset size creates meaningful reinvestment capacity. Model automation ROI as FTE hours eliminated × fully loaded cost + error rate reduction × downstream cost avoidance.',
+    revenue:'Non-interest income diversification reduces NIM sensitivity — critical in a normalizing rate environment. Model fee contribution as a % of total revenue to set realistic targets.',
+  };
+  const top=topP[0]?.id;
+  if(top&&priIns[top]){const d=document.createElement('div');d.className='insight-item';d.innerHTML=priIns[top];ins.appendChild(d);}
+  if(topP[1]&&priIns[topP[1].id]){const d=document.createElement('div');d.className='insight-item';d.innerHTML=priIns[topP[1].id];ins.appendChild(d);}
+
+  document.getElementById('kpi-output').style.display='block';
+  window._kpis=kpis;
+  window._topPriorities=topP;
+  buildBusinessCase(kpis,topP);
+}
+
+function buildBusinessCase(kpis,topPriorities) {
+  const bc=document.getElementById('bc-output');
+  bc.innerHTML='';
+  const profileVal=document.getElementById('cu-profile')?.value;
+  const cuName=profileVal&&CU_PROFILES[profileVal]?CU_PROFILES[profileVal].name:'Your Credit Union';
+  const assets=fv('f-assets');
+  const top=topPriorities[0]?.id;
+  const top2=topPriorities.slice(0,2).map(p=>p.name).join(' and ');
+  const alerts=kpis.filter(k=>k.status==='alert');
+  const nimKpi=kpis.find(k=>k.lbl==='Net Interest Margin');
+  const erKpi=kpis.find(k=>k.lbl==='Efficiency Ratio');
+
+  // Executive summary
+  const profileVal2 = document.getElementById('cu-profile')?.value;
+  const profileData = (profileVal2 && CU_PROFILES[profileVal2]) ? CU_PROFILES[profileVal2] : null;
+  const hasGoodwill = profileData?.net_income_statutory !== undefined && profileData?.netincome !== profileData?.net_income_statutory;
+  const ldrKpi = kpis.find(k=>k.lbl==='Loan / Deposit Ratio');
+  const spreadKpi = kpis.find(k=>k.lbl==='Loan-Deposit Spread');
+  const impairedKpi = kpis.find(k=>k.lbl==='Impaired Loans');
+  const depositCostKpi = kpis.find(k=>k.lbl==='Deposit Cost');
+
+  const s1=mkBC('exec-summary');
+  s1.innerHTML+=`<div class="fin-section-title" style="border:none;padding:0;margin-bottom:10px">Executive Summary</div>
+    <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:10px">
+      <strong style="color:var(--forest)">${cuName}</strong> enters FY2026 with a balance sheet under material structural pressure.
+      ${hasGoodwill?`Statutory net income of <strong style="color:var(--forest)">$${profileData.net_income_statutory}M</strong> reflects a one-time goodwill impairment of <strong style="color:var(--forest)">$65.7M</strong> (net of tax) related to the 2016 OneCap acquisition. Adjusted net income of <strong style="color:var(--forest)">$${profileData.netincome}M</strong> is the more relevant operational benchmark.`:''}
+      ${alerts.length>0?`<strong style="color:var(--rosewood)">${alerts.length} KPI${alerts.length>1?'s':''}</strong> are below sector norms — these are not isolated metrics but interconnected symptoms of a structural funding gap.`:''}</p>
+    <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:10px">
+      ${ldrKpi?`The Loan/Deposit ratio of <strong style="color:var(--forest)">${ldrKpi.val}</strong> is the most urgent balance sheet signal: ${cuName} is funding <strong>22 cents of every loan dollar through securitization</strong> rather than member deposits. At $5.4B in securitization liabilities, this structural dependence on wholesale funding is both a cost drag and a strategic vulnerability in a tightening liquidity environment.`:''}
+    </p>
+    <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:10px">
+      ${nimKpi?`NIM of <strong style="color:var(--forest)">${nimKpi.val}</strong> is below the 2.0–2.4% sector norm. `:''}
+      ${spreadKpi?`The loan-deposit spread of <strong style="color:var(--forest)">${spreadKpi.val}</strong> ${spreadKpi.status==='ok'?'is adequate but constrained by':'is being compressed by'} a deposit cost of <strong style="color:var(--forest)">${depositCostKpi?.val||''}</strong> — structural not cyclical. `:''}
+      ${impairedKpi?`Impaired loans at <strong style="color:var(--forest)">${impairedKpi.val}</strong> drove a $95.6M provision for credit losses in FY2025, directly suppressing net income and ROA.`:''}
+    </p>
+    <p style="font-size:13px;color:var(--mid);line-height:1.7">
+      ${erKpi?`The efficiency ratio of <strong style="color:var(--forest)">${erKpi.val}</strong> is the one bright spot — ${cuName} is operationally lean. This creates a narrow but real window: technology investments that improve deposit attraction, deepen member relationships, and reduce funding costs can be justified precisely because operating cost discipline is already in place.`:''}
+    </p>`;
+  bc.appendChild(s1);
+
+  // Shortlist
+  const s2=mkBC('shortlist');
+  s2.innerHTML+=`<div class="fin-section-title" style="border:none;padding:0;margin-bottom:12px">Recommended Fintech Shortlist — Ranked by Priority Alignment</div>`;
+  const scored=FINTECHS.map(ft=>{let score=0;topPriorities.forEach((p,i)=>{const m=ft.matches[p.id];if(!m)return;const w=Math.max(1,4-i);score+=m.type==='primary'?w*3:w*1;});if(ft.ca)score+=1;return{...ft,score};}).filter(ft=>ft.score>0).sort((a,b)=>b.score-a.score).slice(0,6);
+  scored.forEach((ft,i)=>{const matchedP=topPriorities.filter(p=>ft.matches[p.id]);const topMatch=matchedP[0]?ft.matches[matchedP[0].id]:null;const r=document.createElement('div');r.className='shortlist-row';r.innerHTML=`<div class="sl-rank">${i+1}</div><div class="sl-body"><div class="sl-name">${ft.name}</div><div class="sl-cat">${ft.category}</div><div class="sl-rationale">Addresses: ${matchedP.slice(0,3).map(p=>p.name).join(', ')}.${topMatch?' Primary capability: '+topMatch.label+'.':''}</div><div class="sl-badges">${ft.ca?'<span class="sl-badge badge-ca">CA</span>':''}${matchedP.slice(0,2).map(p=>`<span class="sl-badge badge-pri">${p.name}</span>`).join('')}</div></div>`;s2.appendChild(r);});
+  bc.appendChild(s2);
+
+  // ROI
+  const s3=mkBC('roi');
+  s3.innerHTML+=`<div class="fin-section-title" style="border:none;padding:0;margin-bottom:12px">Indicative ROI Framework</div>`;
+  const roiMap={zillenial:[{lbl:'New member acquisition cost reduction',val:'20–35%',note:'vs. branch-based onboarding'},{lbl:'Revenue uplift per new digital member (Yr 2)',val:'$180–$320',note:'cross-sell into 2nd product'},{lbl:'Typical payback period',val:'18–30 mo',note:'from production deployment'}],deposits:[{lbl:'Deposit base increase target (Yr 1–2)',val:'3–7%',note:'via passporting & payroll switch'},{lbl:'NIM uplift from reduced wholesale funding',val:'+4–9 bps',note:'replacing wholesale with member deposits'},{lbl:'Typical payback period',val:'12–24 mo',note:'depending on attrition offset'}],loan:[{lbl:'Adjudication cycle time reduction',val:'40–65%',note:'hours to minutes for qualified applicants'},{lbl:'Incremental loan volume uplift (Yr 1)',val:'8–18%',note:'via alternative scoring and broker channel'},{lbl:'Typical payback period',val:'12–18 mo',note:'net of ECL provision increase'}],sme:[{lbl:'SME NII per relationship vs. retail',val:'4–6×',note:'operating account + term loan + FX'},{lbl:'Operating account capture rate improvement',val:'+15–30%',note:'vs. current commercial conversion rate'},{lbl:'Typical payback period',val:'24–36 mo',note:'longer cycle; higher LTV'}],opeff:[{lbl:'FTE-equivalent efficiency gain',val:'0.8–2.2',note:'per $100M in assets automated'},{lbl:'Efficiency ratio improvement',val:'2–5 pts',note:'over 24–36 months post-deployment'},{lbl:'Typical payback period',val:'14–22 mo',note:'depending on integration complexity'}],revenue:[{lbl:'Non-interest income uplift',val:'+2–5%',note:'of total revenue, incremental'},{lbl:'Insurance/wealth attach rate',val:'4–12%',note:'via embedded product placement'},{lbl:'Typical payback period',val:'18–28 mo',note:'revenue ramp is slow; costs front-loaded'}]};
+  const roiItems=roiMap[top]||roiMap['loan'];
+  const rg=document.createElement('div');rg.className='roi-row';
+  roiItems.forEach(r=>{const c=document.createElement('div');c.className='roi-card';c.innerHTML=`<div class="roi-lbl">${r.lbl}</div><div class="roi-val">${r.val}</div><div class="roi-note">${r.note}</div>`;rg.appendChild(c);});
+  s3.appendChild(rg);
+  // Calculated NII/loan uplift
+  if(assets&&top==='deposits'){const nii2=fv('f-nii'),deps=fv('f-deposits');if(nii2&&deps){
+    const profData = (profileVal2&&CU_PROFILES[profileVal2])?CU_PROFILES[profileVal2]:null;
+    const dc = profData?.deposit_cost || 0;
+    const ly2 = fv('f-loanyield') || 0;
+    const spread2 = ly2 && dc ? (ly2 - dc) : (nii2/assets*100);
+    const targetDeposits = assets * 0.05;
+    // If we replace wholesale funding with member deposits, benefit = spread on new deposits
+    // Securitization cost ~3.2-3.5% vs member deposit cost ~2.91% = ~40bps saving + NIM improvement
+    const secLiabilities = profData ? 5361.1 : 0;
+    const secNote = secLiabilities > 0 ? ` Replacing even 10% of the $${secLiabilities.toLocaleString()}M securitization liability with member deposits at current rates could save approximately <strong style="color:var(--forest)">$${Math.round(secLiabilities*0.1*0.004).toLocaleString()}M annually</strong> in funding costs.` : '';
+    const uplift = targetDeposits * (spread2/100);
+    s3.innerHTML+=`<div style="font-size:12px;color:var(--mid);font-style:italic;margin-top:10px;padding:8px 12px;background:var(--linen);border-radius:5px">A 5% increase in member deposits (~$${Math.round(targetDeposits).toLocaleString()}M) deployed at the current loan-deposit spread of ${spread2.toFixed(2)}% would generate approximately <strong style="color:var(--forest)">$${Math.round(uplift).toLocaleString()}M in incremental annual NII</strong> — before funding cost offset.${secNote}</div>`;
+  }}
+  if(assets&&top==='loan'){const loans=fv('f-loans'),ly=fv('f-loanyield');if(loans&&ly){const uplift=loans*0.10*(ly/100);s3.innerHTML+=`<div style="font-size:12px;color:var(--mid);font-style:italic;margin-top:10px;padding:8px 12px;background:var(--linen);border-radius:5px">At your current average loan yield of ${ly}%, a 10% loan portfolio expansion (~$${Math.round(loans*0.1).toLocaleString()}M) would generate approximately <strong style="color:var(--forest)">$${Math.round(uplift).toLocaleString()}M in incremental annual interest income</strong> before ECL provisions.</div>`;}}
+  bc.appendChild(s3);
+
+  // Risk flags
+  const s4=mkBC('risks');
+  s4.innerHTML+=`<div class="fin-section-title" style="border:none;padding:0;margin-bottom:12px">Risk Flags for Board Consideration</div>`;
+  const risks=[
+    {flag:'🔴',text:'<strong>Integration risk:</strong> Underestimating core system integration complexity is the most common source of fintech partnership failure. Budget 30–50% above vendor estimates for integration and testing.'},
+    {flag:'🔴',text:'<strong>Canadian regulatory fit:</strong> Confirm PIPEDA/RPAA compliance and FINTRAC reporting capability before shortlisting. Non-Canadian vendors without Canadian deployments are a material compliance risk.'},
+    {flag:'🟡',text:'<strong>Total cost of ownership:</strong> Headline SaaS licence fees typically represent 40–60% of 5-year total cost. Request all-in cost modelling including professional services, internal FTE, and price escalation clauses.'},
+    {flag:'🟡',text:'<strong>Member data governance:</strong> Confirm member data ownership is explicitly stated in contract terms. Vendors aggregating anonymised client data for product development require explicit board-level policy.'},
+    {flag:'🟡',text:'<strong>Vendor concentration:</strong> Multiple partnerships addressing the same use case create dependency risk. Prioritise partners with open API architecture and portable data formats.'},
+    {flag:'🟢',text:'<strong>CA-headquartered preference:</strong> Canadian-based fintechs carry lower regulatory translation risk and typically have existing relationships with CCUA or Central 1, reducing due diligence burden.'},
+  ];
+  if(alerts.find(k=>k.lbl==='Efficiency Ratio')){risks.unshift({flag:'🔴',text:`<strong>Efficiency ratio pressure:</strong> Your current efficiency ratio requires any new partnership carry an explicit opex reduction narrative — boards are unlikely to approve technology spend that increases the ratio without a 24-month improvement pathway.`});}
+  risks.forEach(r=>{const d=document.createElement('div');d.className='risk-item';d.innerHTML=`<span class="risk-flag">${r.flag}</span><span>${r.text}</span>`;s4.appendChild(d);});
+  bc.appendChild(s4);
+
+  // CTA
+  const cta=document.createElement('div');
+  cta.className='bc-cta';
+  cta.innerHTML=`<div class="bc-cta-ey">DecAid Consulting Inc. — Fintech Partnership Advisory</div><div class="bc-cta-hl">This framework identifies the opportunity. <strong>DecAid closes the gap between strategic intent and successful member outcome.</strong></div><div class="bc-cta-bd">DecAid supports credit unions through partner evaluation, contract risk review, governance framework design, board presentation development, and ongoing partnership performance management. Every engagement is anchored to the balance sheet metrics executives are compensated on — NII, NIM, efficiency ratio, and deposit primacy.</div><a class="bc-cta-link" href="mailto:iscott@decaidconsulting.com">iscott@decaidconsulting.com — Book a 20-minute partnership readiness call</a>`;
+  bc.appendChild(cta);
+}
+
+function mkBC(id) {
+  const d=document.createElement('div');
+  d.className='bc-section';
+  d.id='bc-'+id;
+  return d;
+}
+
+// ── INIT ────────────────────────────────────────────────────
+buildPriorityGrid();
+</script>
+
+<!-- TAB 4: KPIs -->
+<div class="panel" id="tab4">
+  <div class="panel-title">Financial KPIs & Sector Benchmarks</div>
+  <div class="panel-sub">Enter your institution's financial data to benchmark current performance against Canadian credit union sector norms. KPIs are contextualised against your stated priority profile.</div>
+
+  <div style="background:var(--white);border:1px solid var(--stone);border-radius:8px;padding:18px 22px;margin-bottom:20px">
+    <div class="fin-section-title">Institution Financial Profile</div>
+    <div class="profile-select-row">
+      <label>Load a profile:</label>
+      <select id="cu-profile" onchange="loadProfile()">
+        <option value="">— Select a credit union —</option>
+        <option value="meridian">Meridian Credit Union (FY2025 audited)</option>
+        <option value="vancity">Vancity (FY2025 audited)</option>
+        <option value="custom">Enter manually</option>
+      </select>
+      <span style="font-size:11px;color:var(--fern);font-style:italic" id="profile-note"></span>
+    </div>
+    <div class="fin-inputs-grid">
+      <div class="fin-input-group"><label>Total Assets ($M)</label><input type="number" id="f-assets" placeholder="e.g. 2,400"><div class="hint">Balance sheet total</div></div>
+      <div class="fin-input-group"><label>Total Member Deposits ($M)</label><input type="number" id="f-deposits" placeholder="e.g. 1,950"><div class="hint">All deposit categories</div></div>
+      <div class="fin-input-group"><label>Net Interest Income ($M)</label><input type="number" id="f-nii" placeholder="e.g. 68"><div class="hint">From income statement</div></div>
+      <div class="fin-input-group"><label>Net Income / Surplus ($M)</label><input type="number" id="f-netincome" placeholder="e.g. 12"><div class="hint">After tax</div></div>
+      <div class="fin-input-group"><label>Operating Expenses ($M)</label><input type="number" id="f-opex" placeholder="e.g. 52"><div class="hint">Total non-interest expense</div></div>
+      <div class="fin-input-group"><label>Total Revenue ($M)</label><input type="number" id="f-revenue" placeholder="e.g. 80"><div class="hint">NII + non-interest income</div></div>
+      <div class="fin-input-group"><label>Total Loans ($M)</label><input type="number" id="f-loans" placeholder="e.g. 1,800" oninput="calcLoanYield()"><div class="hint">Gross loan portfolio</div></div>
+      <div class="fin-input-group"><label>Number of Members</label><input type="number" id="f-members" placeholder="e.g. 85,000"><div class="hint">Active member count</div></div>
+      <div class="fin-input-group"><label>Interest Income on Loans ($M)</label><input type="number" step="0.1" id="f-loanincome" placeholder="e.g. 78" oninput="calcLoanYield()"><div class="hint">From NII note in financials</div></div>
+      <div class="fin-input-group"><label>Avg Loan Yield (%)</label><input type="number" step="0.01" id="f-loanyield" placeholder="Auto-calculated"><div class="hint" id="loanyield-hint">Calculated from interest income ÷ loans, or enter manually</div></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="btn-primary" onclick="buildKPIs()">Generate KPI Analysis →</button>
+      <button class="btn-secondary" onclick="clearFinancials()">Clear</button>
+    </div>
+  </div>
+
+  <div id="kpi-output" style="display:none">
+    <div class="fin-section-title">KPI Dashboard — vs. Canadian CU Sector Norms</div>
+    <div class="kpi-grid-4" id="kpi-cards"></div>
+    <div class="fin-section-title">Priority-Linked Financial Insights</div>
+    <div class="insight-strip" id="kpi-insights"></div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn-primary" onclick="showTab(5,null)">Next: Build Business Case →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: BUSINESS CASE -->
+<div class="panel" id="tab5">
+  <div class="panel-title">Board-Ready Business Case</div>
+  <div class="panel-sub">Based on your priority profile, financial position, and the fintech matrix — a structured business case framework for executive and board presentation.</div>
+  <div id="bc-output">
+    <div class="empty-state">Complete tabs 1–4 first, then return here to generate the business case.</div>
+  </div>
+</div>
+
+</body>
+</html>
